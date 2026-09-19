@@ -1,0 +1,43 @@
+name: Reproduce public model
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: reproduce-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  linux-minimum-node:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.18.0'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Record environment and source identity
+        run: |
+          mkdir -p results
+          node scripts/source-identity.ts > results/source-identity.json
+          node -e 'const os=require("node:os"); console.log(JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,cpu:os.cpus()[0].model,cores:os.cpus().length,memory:os.totalmem()}))' > results/environment.json
+          uname -a > results/kernel.txt
+      - name: Run all checks and full restore in isolated Linux network namespace
+        run: sudo unshare --net -- env PATH="$PATH" bash scripts/ci-offline.sh
+      - name: Upload reports only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-node-22.18-reports
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            results/environment.json
+            results/kernel.txt
+            results/source-identity.json
+            results/linux-full/report.json
+            results/linux-partial/report.json
+            results/linux-resumed/report.json

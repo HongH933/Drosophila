@@ -20,7 +20,11 @@
     "core:verify": "node scripts/core.ts",
     "tasks:export": "node scripts/tasks.ts",
     "files:verify": "node scripts/check-files.ts",
-    "result:verify": "node scripts/check-result.ts"
+    "result:verify": "node scripts/check-result.ts",
+    "files:update": "node scripts/files-update.ts",
+    "verify:chain:full-run": "node scripts/verify-chain-full-run.ts",
+    "source:identity": "node scripts/source-identity.ts",
+    "docs:verify": "node scripts/check-docs.ts"
   },
   "dependencies": {
     "viem": "2.56.5"

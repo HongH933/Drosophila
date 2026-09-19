@@ -1,0 +1,15 @@
+{
+  "schema": "droso-linux-ci-status-v1",
+  "status": "WORKFLOW_PREPARED_NOT_RUN",
+  "workflow": ".github/workflows/reproduce.yml",
+  "os": "ubuntu-24.04",
+  "node": "22.18.0",
+  "timeoutMinutes": 45,
+  "permissions": {
+    "contents": "read"
+  },
+  "offlineEnforcement": "Linux network namespace via sudo unshare --net plus instrumented Node network guard",
+  "outputs": "small report JSON and environment only",
+  "linuxExecution": "BLOCKED_NO_AVAILABLE_LINUX_RUNTIME",
+  "reason": "No installed Linux device/container/VM available; user confirmed none. No push or remote CI dispatch authorized by this task."
+}

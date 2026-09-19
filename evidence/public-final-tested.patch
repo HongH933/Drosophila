@@ -1,0 +1,539 @@
+diff --git a/README.md b/README.md
+index fa37755..bf59e7c 100644
+--- a/README.md
++++ b/README.md
+@@ -1,19 +1,51 @@
+-# droso
++# Drosophila / droso
+ 
+-**这是社会实验和工程模型，不是真实果蝇行为、意识、糖响应或论文功能模型的复刻证明。**
++基于 **MaleCNS v1.0 的明确神经元内部连接图**，本项目构建了由实际 NAND/LATCH 网表执行的整数神经模型：**166,700 个神经元、25,582,938 条内部有向连接、10,419 枚独立 Circuit NFT**。数据和这些 NFT 已部署并托管在 BSC Testnet；公开包包含两个本地时间步之前的完整快照，可以重新计算并逐神经元核对结果。每枚 Circuit 为 **56 NAND + 3 LATCH、404 bytes**。
+ 
+-我们把 MaleCNS v1.0 的一个明确神经元内部连接图映射为整数神经模型，用实际 **56 NAND + 3 LATCH** 网表执行。每个模块对应一枚独立 Circuit NFT；本版本有 **10,419 枚 NFT、166,700 个神经元、25,582,938 条连接**。数据及电路已部署并托管在 BSC Testnet。电脑是主要计算端。
++这是社会实验与工程模型；两步验收发生在本地，不宣称真实果蝇行为、糖响应、意识或论文功能等价。
+ 
+-公开包独立包含复现载荷，不需要原研发仓库、钱包、私钥、tBNB 或 Anvil。依赖安装后，普通复现不访问网络。只读链核对需要你自己的 RPC，是单独的可选步骤。
++```mermaid
++flowchart LR
++    A[MaleCNS 数据] --> B[测试网数据页与 Circuit NFT]
++    B --> C[固定区块 step0 快照]
++    C --> D[本地实际 NAND/LATCH 网表计算]
++    D --> E[独立整数参考与固定结果比较]
++```
++
++## 测试网部署与证据
++
++网络：**BNB Smart Chain Testnet，chainId 97**。以下是本项目使用的部署，不代表上游官方背书。电脑是主要计算端；这些浏览器入口均指向测试网。
++
++| 用途 | 实际地址 / 测试网浏览器 |
++| --- | --- |
++| Factory：创建协议实例 | [0x076e383ff2e490A493f1f5c4359e922C46c54c01](https://testnet.bscscan.com/address/0x076e383ff2e490A493f1f5c4359e922C46c54c01) |
++| Circuits / Processor：独立电路 NFT | [0xa21f3a3ef5EBc12A687eCf168a9C1937E5FE4486](https://testnet.bscscan.com/address/0xa21f3a3ef5EBc12A687eCf168a9C1937E5FE4486) |
++| Transistors：NAND/LATCH 材料 | [0x7795fdaBdF41eF0cF549FD0a2aa8b76719E10b78](https://testnet.bscscan.com/address/0x7795fdaBdF41eF0cF549FD0a2aa8b76719E10b78) |
++| Assembly：配置、托管及集齐屏障 | [0xbe0d3af811fbdf9e5fcdc421b56fb001239efd51](https://testnet.bscscan.com/address/0xbe0d3af811fbdf9e5fcdc421b56fb001239efd51) |
++| StaticMicroData：不可变数据页目录 | [0x827F41F43be699ca7f2255b8bF19dFbE8122f1bD](https://testnet.bscscan.com/address/0x827F41F43be699ca7f2255b8bF19dFbE8122f1bD) |
++
++默认历史锚点是 **131798986**，hash `0x4b09598a04faf3f8f6cb635dc1d6776733b0c66713ba86ced57b870c23293c54`。该快照 `ready=true / completedSteps=0 / active=false`，表示两个本地时间步之前的状态，**不是实时状态声明**。
++
++- [验收说明](docs/ACCEPTANCE.md) · [部署信息](deployments/bsc-testnet/deployment.json)
++- 原签名证据：[托管与 ready](deployments/bsc-testnet/ready.json) · [链数据重建](deployments/bsc-testnet/rebuild-report.json) · [两步本地验收](deployments/bsc-testnet/local-acceptance-signed.json)
++- [测试前快照说明](docs/FORMAT_AND_BUILD.md) · [step0 锚点](snapshots/initial/release.json) · [31 个分片清单](bundles/export-manifest.json) · [全部发行文件校验清单](checksums/files.json)
++- [实际核心网表](core/core.bin) · [核心生成器](src/micro-core.ts) · [网表解释器](src/binary-gates.ts) · [全量门级运行器](src/packed-micro.ts)
++- [组装合约源码](contracts/BrainAssemblyMicroPages.sol) · [数据合约源码](contracts/StaticMicroData.sol) · [准确编译输入](build/compiler-input.json)
++- 完整预期结果：[step1](expected/step1.states.txt.gz) · [step2](expected/step2.states.txt.gz) · [固定摘要](expected/steps.json)
++- [历史链核对与自动续查](docs/HISTORICAL_VERIFY.md)
+ 
+ ## 快速离线复现
+ 
+ 要求 Node.js >=22.18，建议64位系统、至少数GiB可用内存与约2GiB可用磁盘；这是工程建议，不是所有机器上的最低配置保证。
+ 
+ ```sh
++git clone https://github.com/HongH933/Drosophila.git
++cd Drosophila
+ npm ci
++npm run files:verify
+ npm run snapshot:verify
+ npm run reproduce -- --steps 2 --out results/my-first-run
++npm run result:verify -- results/my-first-run/report.json
+ ```
+ 
+ `results/my-first-run/report.json` 给出结果、耗时、内存、机器环境和检查点；`step1.states.txt` / `step2.states.txt` 给出每个bodyId的电位和脉冲。输出目录必须尚不存在。再次运行请选择新目录。
+@@ -35,11 +67,11 @@ npm run reproduce -- --resume results/partial/report.json --out results/resumed
+ cp .env.example .env
+ # 在 .env 中填写自己的 BSC_TESTNET_RPC_URL；无需任何钱包字段。
+ npm run verify:chain -- --mode sample --out results/history-sample.json
+-npm run verify:chain -- --mode full --out results/history-full.json
++npm run verify:chain:full-run -- --out results/full-history
+ npm run status:chain
+ ```
+ 
+-历史RPC必须提供区块 **131798986** 的状态。优先使用blockHash+requireCanonical；节点明确拒绝该参数时固定区块号，并在每组前后核对hash；历史状态不可用时报告UNAVAILABLE，绝不改读latest冒充通过。sample为公开固定种子选择32槽/32页；full覆盖全部10419槽/51567页。每次最多10分钟，PARTIAL原地恢复：
++历史RPC必须提供区块 **131798986** 的状态。优先使用blockHash+requireCanonical；节点明确拒绝该参数时固定区块号，并在每组前后核对hash；历史状态不可用时报告UNAVAILABLE，绝不改读latest冒充通过。sample为公开固定种子选择32槽/32页；full覆盖全部10419槽/51567页。自动 full 入口每段最多10分钟/30000请求，整次最多6小时/300000请求；同一个命令可接续已保存进度。发生 UNAVAILABLE 或 FAILED 不会无限重试。单段工具也可手动恢复：
+ 
+ ```sh
+ npm run verify:chain -- --mode full --resume results/history-full.json.checkpoint.json --out results/history-full-next.json
+diff --git a/checksums/files.json b/checksums/files.json
+index 40e25db..e41c3d6 100644
+--- a/checksums/files.json
++++ b/checksums/files.json
+@@ -1 +1 @@
+-{"schema":"droso-public-files-v1","files":[{"file":".env.example","bytes":81,"sha256":"6b1dc8daffa946cd7e94e1665e923d42cc2f8f6b7c421c83a6313f56580b4fb8"},{"file":".gitignore","bytes":55,"sha256":"a508a681d769a78fcdf49a0d68c2a3430af7b7a1e3076c1944c3bd31e75b1eae"},{"file":"LICENSE","bytes":1087,"sha256":"0fec3e1d5b6929fd31a81633f2bff635c2b89962a808324002be3c47027fc4ac"},{"file":"NOTICE.md","bytes":2320,"sha256":"24c2256ca4eb14398281dc5374173ad4d24ed27f86386bd7d4fcaacd8579bade"},{"file":"README.md","bytes":5607,"sha256":"0263cfe5a23ca1bff2fea9ea9ad9884aa4430e71668e04a14bffc8ebf83132b5"},{"file":"abi/CircuitFactory.json","bytes":8184,"sha256":"00429f2b439fb2b813286d4faaff35426d2413db79cf64c57ce57b762eda7faf"},{"file":"abi/Circuits.json","bytes":8809,"sha256":"cffbfd891180e406bdf6e8343788a9af0c43ae6671f815113ecbd288bb4cde2e"},{"file":"abi/Transistors.json","bytes":9619,"sha256":"9112cf3763b9540e4075d7b669d75db568e6e1d22686349fc45db58f674c329c"},{"file":"build/BrainAssemblyMicroPages.json","bytes":134878,"sha256":"abf8e8f0fc778e576084d52e7a13e3feda673c6368153a2a1a666f1e32de0fba"},{"file":"build/MicroDataPage.json","bytes":960,"sha256":"07763b03a98cc8f47b203d4e18931b02320e04e79988969b578b86aebd1b471b"},{"file":"build/StaticMicroData.json","bytes":31953,"sha256":"bda7f21455e04b9b9c351e935c4c118a87f8ee353e48de1cfa0021fac199e05e"},{"file":"build/build-info.json","bytes":314,"sha256":"2e73f0059866a9e44ad20ae41113ca44d26b318105a3c1a7c01d9220c167cf32"},{"file":"build/compiler-input.json","bytes":36965,"sha256":"d96e49a07a2af9a9cd53640b133ef391747e5d2976aaf40ca382fd84ad682a27"},{"file":"bundles/export-manifest.json","bytes":183487,"sha256":"d0cba834a4a7a154cdb95bfd97c4136a1281c94c9cd469299d926780d87dc50e"},{"file":"bundles/snapshot-000.bin.gz","bytes":549148,"sha256":"856f0c3e166c8a23e5737482f743c724526224ff237a5e5516685a6e496ab17a"},{"file":"bundles/snapshot-001.bin.gz","bytes":499123,"sha256":"2cf48fbde8f9918996c7fab8768f85f45c4eff86e9f240babb3737156712cde8"},{"file":"bundles/snapshot-002.bin.gz","bytes":493532,"sha256":"625b7eb0bfd2d501179506468e5ec532294c5a6ace40bffe01c7b9f55925db43"},{"file":"bundles/snapshot-003.bin.gz","bytes":499959,"sha256":"e8e67d541a14a28fa69d858f83aa6f194d611f690c9e9c932d7e6708f03441ae"},{"file":"bundles/snapshot-004.bin.gz","bytes":2955651,"sha256":"653d8cb9cee0870d055eeb682fdcc60b148f37d57c6f8396fc83ceb5ac1aa165"},{"file":"bundles/snapshot-005.bin.gz","bytes":4272605,"sha256":"553e332468b90af06fd99bbe69c49fda32aa2144e3d730d5a875a8d5c6262110"},{"file":"bundles/snapshot-006.bin.gz","bytes":4371330,"sha256":"3e8597ce4e3d0b7b184be6712be7002fc6cc44e822c4785d4153f116a03560e9"},{"file":"bundles/snapshot-007.bin.gz","bytes":4433924,"sha256":"c7a69c24a86403f1c0aa5c0d708431289b3d5dc1d8eb728090942743f0d84e9e"},{"file":"bundles/snapshot-008.bin.gz","bytes":4480276,"sha256":"bf560efd1ecb67ebdadc264045724926726864bb364b787b904901be31ca7fae"},{"file":"bundles/snapshot-009.bin.gz","bytes":4515150,"sha256":"d00e43434c5d4637e52c811670be431ad09bc03694a1e81e020092f6673c3b7f"},{"file":"bundles/snapshot-010.bin.gz","bytes":4552876,"sha256":"a3a92bbd49a33b823656f1fd770aac972613fdb8b7ab7023f612706c8590630a"},{"file":"bundles/snapshot-011.bin.gz","bytes":4589438,"sha256":"819b660ae900cbc3b5765bc4531ace020115fde89e89481246c940dc228367be"},{"file":"bundles/snapshot-012.bin.gz","bytes":4617133,"sha256":"18ae1fb019ee7beb63c9211c66cac939e6233902bdcfca5a22b584a27d6ab355"},{"file":"bundles/snapshot-013.bin.gz","bytes":4638897,"sha256":"34eddd31097c465f1f64a2630251bca0094c8aff9858cd1d3bc805ff0588a453"},{"file":"bundles/snapshot-014.bin.gz","bytes":4653647,"sha256":"2b46d66e13ab7e9858ade0c73c864f448f42f94600b963834853165d30aa871f"},{"file":"bundles/snapshot-015.bin.gz","bytes":4669107,"sha256":"0535ad8af7651a409c0b5f0181360e3aa7a1e11dc0b60a0c7e03c83c0f2aa96e"},{"file":"bundles/snapshot-016.bin.gz","bytes":4685281,"sha256":"727183e5b0b55ff3715de7ac414e9e3833d5039d5a37cf9b9493815104e513f3"},{"file":"bundles/snapshot-017.bin.gz","bytes":4700382,"sha256":"c0d683f504c2eefd7a15d7b91f833f4ae1144f9677ef62bbaefdd9e9d768b8ad"},{"file":"bundles/snapshot-018.bin.gz","bytes":4732084,"sha256":"298fb6d2f364f766048cace0257b797f84452f48728ec1470440b3933c6d618e"},{"file":"bundles/snapshot-019.bin.gz","bytes":4775856,"sha256":"ae1483c63b9f830930e153482e5fb09d70193737998ede82f7ca13b399039032"},{"file":"bundles/snapshot-020.bin.gz","bytes":4785776,"sha256":"99acd009cffbf6aa16294b7c5eea99bbbf2ba0c0b0bf5ea5c1b833a4949f0b62"},{"file":"bundles/snapshot-021.bin.gz","bytes":4767043,"sha256":"bb1129636ae19d5aa707bf912832553ddb268a805a3c7e7071052c06e8fa6507"},{"file":"bundles/snapshot-022.bin.gz","bytes":4747255,"sha256":"ae500ca1a24defe16ea42b3b5a351f3fc0efb0ef1689f222fc262f70b52688bd"},{"file":"bundles/snapshot-023.bin.gz","bytes":4550709,"sha256":"a0f1b94123e633eb383ac448914942ac021c2a2b4bc577cbf79a3e7351a2b671"},{"file":"bundles/snapshot-024.bin.gz","bytes":4509138,"sha256":"61576fcdf110186e9d9db1d181428ca70cb855900bb870c7a5b47d5e487fc23a"},{"file":"bundles/snapshot-025.bin.gz","bytes":4672442,"sha256":"af000cddc1c50265ce57ce148877d9b09f1b6e6e83ff8612ca9a49eeebf7c421"},{"file":"bundles/snapshot-026.bin.gz","bytes":4408915,"sha256":"05ab9063706c6ec896de52f082e3dfccfaa1d8b212d8b8a3ea502b5b0dbcb4a0"},{"file":"bundles/snapshot-027.bin.gz","bytes":4411529,"sha256":"f329f4f05af22002e68fb5531cce334788e0406938c0eb8f263447ba5841b702"},{"file":"bundles/snapshot-028.bin.gz","bytes":4513671,"sha256":"ba9fe0fa5d9de864202253b250501965445dce2e72ce6b996fb251e0f6c8f3fa"},{"file":"bundles/snapshot-029.bin.gz","bytes":5147516,"sha256":"f722763e7b558ef17769afb39fe39d53a4b6eaae314442c88ea68b4905fddfd0"},{"file":"bundles/snapshot-030.bin.gz","bytes":2857168,"sha256":"fe0f12aaa4c6b67fafd72d3d44a9d56739c74c40a74ee83c00c212f3c6c18eaf"},{"file":"contracts/BrainAssembly.sol","bytes":10797,"sha256":"9f3c1035c5669a031a136fd81ff9f91ebcd3e0b462a6807d57f6b12e6e1b06c1"},{"file":"contracts/BrainAssemblyMicroPages.sol","bytes":18991,"sha256":"1e869624acfb85ea2b4fd6753eafea89f8dab1493e6759e72e8538456677d116"},{"file":"contracts/StaticMicroData.sol","bytes":6362,"sha256":"ede0b0d22a5d16b09e3a75127bdc7a4819cecb52a00e3998e32327c15828c01d"},{"file":"core/ABC-LICENSE","bytes":1129,"sha256":"819151b8f059a48f806c75732ef62b1f873b49b6a04fb128aed28bf87d3dcd6c"},{"file":"core/core.bin","bytes":404,"sha256":"94a289de04d23291fdacb38effdc95ba28b025b69e978505fab8c8565013f6fb"},{"file":"core/selected.blif","bytes":1926,"sha256":"fedd05ce71024ca6035bec6c1949f58aa4909328f11ec396bd905c51ce6673f2"},{"file":"deployments/bsc-testnet/custody-fingerprint.json","bytes":337,"sha256":"2aee985b060f0fc49db11866e0cac1299b1076e2ee8b44f8aa993a0b62478044"},{"file":"deployments/bsc-testnet/deployment.json","bytes":2280,"sha256":"33ecc8ead1beca06ddf439f5462e69fdd5b7d295cb47f61b53fd08e31cc33249"},{"file":"deployments/bsc-testnet/local-acceptance-signed.json","bytes":1501,"sha256":"95efd03a61baa3918f1bb0f8ecca43007dfe3be9bb450a6d77844dbc9c2df877"},{"file":"deployments/bsc-testnet/page-config.json","bytes":239,"sha256":"6ffe1e75bcd8f645def3cb85dbcb3d229d4ce95be9dd27eac7b8a8155d4cd38b"},{"file":"deployments/bsc-testnet/protocol-lock.json","bytes":2594,"sha256":"de89dbc31aa7384b074bbcf46872fa83d92bee1019928f0201b78e958a28bd2f"},{"file":"deployments/bsc-testnet/ready.json","bytes":1432,"sha256":"8a15371bfd7dc1321e729b126a319aff59044af6b6d1fd467729362458bcb958"},{"file":"deployments/bsc-testnet/rebuild-report.json","bytes":1544,"sha256":"8832c9e2230115195cccbc30cd69fddfc67093dbf034901aed740e9279718347"},{"file":"docs/ACCEPTANCE.md","bytes":3830,"sha256":"1e743cb48734647d41670a89fb28d1e25818a24705d77f8c3d1e5634dccaf344"},{"file":"docs/FORMAT_AND_BUILD.md","bytes":4173,"sha256":"d16cda16215588794fe92c1f08407b8906a9162ef4e5ae0918dc2c544db68d1d"},{"file":"docs/MODEL_AND_DATA.md","bytes":4374,"sha256":"da43ffc3ad60a828c02fd80005873e24c29c423831832b73950f3391a51d4792"},{"file":"docs/PUBLISHING.md","bytes":2176,"sha256":"2f289761bb6d8f03e26b1f170c5a81eb65686ff86fd5612ed1efc90e016b2c90"},{"file":"docs/SECURITY_AND_COSTS.md","bytes":3831,"sha256":"508d508b674923a465cbbb76433aa570ff84107bf080e5babbbe9b554fbd28c8"},{"file":"docs/data-model.json","bytes":7489,"sha256":"21cc25f1959130ed76681a93515d7949509cd0940543a7a74215a0063b9e31fd"},{"file":"evidence/chain-identities.json","bytes":124660,"sha256":"897b7cb26e3352fa64f2e8fc0ff5b664d71a9948fb2dd0c8907df4f48ae08124"},{"file":"evidence/clean-full-run.json","bytes":1272,"sha256":"75348e3dab3fe52424bb278b92727b0d947a46d47376626b57319fbcee3dd0d9"},{"file":"evidence/clean-isolation.json","bytes":231,"sha256":"94af5defdc76d51704b422841c850a1733c52d0fa9e59b54f747289f32a17b68"},{"file":"evidence/clean-partial.json","bytes":976,"sha256":"01d63a276211763ab3e75cb08b8de7c3fd802829a2c909c2a06a659e3cbbdf11"},{"file":"evidence/clean-resumed.json","bytes":1290,"sha256":"8de4dc684d92d1301b525b54dd1b7953a09ec0f5b25e57199d3f421d839a0739"},{"file":"evidence/new-reader-no-rpc.json","bytes":65,"sha256":"f725ca81c06ab773501d306c9318098a620be47b4c3d0ea77b853f19d5f9d5f2"},{"file":"evidence/new-reader-sample.json","bytes":1083,"sha256":"881ae8d77f0452a82c4546707b5a032e7077cc307408e4a3ff6dabe5c655cb3b"},{"file":"evidence/privacy-scan.json","bytes":437,"sha256":"4d8d82193236d03eb590fd854c464d82b4b6db79b7c48f29670ed6ec5b5774eb"},{"file":"evidence/tool-tests.json","bytes":834,"sha256":"16e91dcacb193ac7f4c160e7947bc66f66a545290cc09f9be113552518b138c1"},{"file":"expected/states-manifest.json","bytes":692,"sha256":"0154bf8ccad54a5c82dc9cbfc1e6cd9511a6e06e69e1709ce123e3ae3fd1ac89"},{"file":"expected/step1.states.txt.gz","bytes":572971,"sha256":"24a3c6f9cd311fe4c939835ad28e9679cc9f8f31436ceacfb9dacbaebad1ec1c"},{"file":"expected/step2.states.txt.gz","bytes":642054,"sha256":"245c6210c9ef0ac0077ceb40cffb504a56610819b1e223fafe6761fc0b660db0"},{"file":"expected/steps.json","bytes":429,"sha256":"31dd0629ead86b56d9f8979c3b39cce55dca7083c9474f81835488add37bd0d9"},{"file":"licenses/@adraffy_ens-normalize-LICENSE","bytes":1077,"sha256":"3b458813ab3316b16bf004c4201d4a0583cf615514422dabf4d7c025988d613d"},{"file":"licenses/@noble_ciphers-LICENSE","bytes":1161,"sha256":"f36671a5487c9c5050efacb58011c37c24c55a889803cb036cf9d9a6347c1e2d"},{"file":"licenses/@noble_curves-LICENSE","bytes":1109,"sha256":"4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"},{"file":"licenses/@noble_hashes-LICENSE","bytes":1109,"sha256":"4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"},{"file":"licenses/@scure_base-LICENSE","bytes":1110,"sha256":"3239e134eb6e6d64538ca76498c7fcb08a395249dd9d4af9927bf6d0169ee429"},{"file":"licenses/@scure_bip32-LICENSE","bytes":1122,"sha256":"1565efd0ec4580bfaa96c7eeaaa9af3791baa1cc562c3bde62d0a055910b9ec7"},{"file":"licenses/@scure_bip39-LICENSE","bytes":1122,"sha256":"1565efd0ec4580bfaa96c7eeaaa9af3791baa1cc562c3bde62d0a055910b9ec7"},{"file":"licenses/@types_node-LICENSE","bytes":1141,"sha256":"c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"},{"file":"licenses/ABC-LICENSE","bytes":1129,"sha256":"819151b8f059a48f806c75732ef62b1f873b49b6a04fb128aed28bf87d3dcd6c"},{"file":"licenses/abitype-LICENSE","bytes":1074,"sha256":"e7f5360a60628940fee8653802d7221d2b9575e26268be2a3a2fdbc04aa84321"},{"file":"licenses/command-exists-LICENSE","bytes":1082,"sha256":"f1354634fd0ced0354bd5b5fe17f4e613f069850bfedaab00c8fd78f6bc77d5e"},{"file":"licenses/commander-LICENSE","bytes":1098,"sha256":"04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b"},{"file":"licenses/dependencies.json","bytes":3238,"sha256":"e0e47b5e29de0f7429c27b7e69010f497720f90a2995a2bb2a968e76b0abe02d"},{"file":"licenses/eventemitter3-LICENSE","bytes":1082,"sha256":"3aecc12b1cb28832b5f65ab64291de96568c3f236a74d646281b4491f7bcadbf"},{"file":"licenses/follow-redirects-LICENSE","bytes":1136,"sha256":"bfa8a54bb952ccda79f0f1889721d108f5b605babbb2b8a3705ffb52f4132eb7"},{"file":"licenses/isows-LICENSE","bytes":1074,"sha256":"091d17ae5f625ffeb381e7109daaf6c492dd32502d612d8ecd24e2ddf6d16b74"},{"file":"licenses/js-sha3-LICENSE.txt","bytes":1059,"sha256":"17b4068b7283f1e9a41b196e3662d4b37cf6f3265173622929d352f5ecdda231"},{"file":"licenses/memorystream-LICENSE","bytes":1059,"sha256":"0077a46edebed7dbeb627dcf8643f5aa07af296fc3699c43a34d095311a856a9"},{"file":"licenses/os-tmpdir-license","bytes":1119,"sha256":"6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c"},{"file":"licenses/ox-LICENSE","bytes":1068,"sha256":"84ecb61c470de66e88a79c7d0ee8ce068e743693a4c249017545b4c8d4f9984d"},{"file":"licenses/semver-LICENSE","bytes":765,"sha256":"4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"},{"file":"licenses/solc-LICENSE","bytes":1067,"sha256":"852bcc033a46c62f99fb5ffd43b3241ba2c0c440c6034aa2114505f2c4f03c4a"},{"file":"licenses/tmp-LICENSE","bytes":1082,"sha256":"162413c61e0982abe89a06bf7a02ec760dc49a7364d838bd9f01daebb5b95954"},{"file":"licenses/typescript-LICENSE.txt","bytes":9197,"sha256":"a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"},{"file":"licenses/undici-types-LICENSE","bytes":1090,"sha256":"a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27"},{"file":"licenses/viem-LICENSE","bytes":1074,"sha256":"091d17ae5f625ffeb381e7109daaf6c492dd32502d612d8ecd24e2ddf6d16b74"},{"file":"licenses/ws-LICENSE","bytes":1183,"sha256":"2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef"},{"file":"package-lock.json","bytes":11989,"sha256":"82263c77db32da5155e4ae13f91a7053f44c96dca9fdb58f5b74c43de584f05c"},{"file":"package.json","bytes":1027,"sha256":"a58d4bdbb277275857b85490c132a2e057bf7749ac05587de15435ffd7760d7d"},{"file":"scripts/build-contracts.ts","bytes":1134,"sha256":"fbf71f099618e81fd6035ac2c1bc7c429e70c16ae4361e2faab2ea0590a9b150"},{"file":"scripts/check-files.ts","bytes":619,"sha256":"11d130f1ca660e69a87c99885185670cf6916c7e6dfbdc2732fb080572584447"},{"file":"scripts/check-result.ts","bytes":1198,"sha256":"71a35af9e8097bc9c9f2f51602d6bcc20fbfec124cb3b31b69015a053c180e33"},{"file":"scripts/core.ts","bytes":481,"sha256":"bf942af39b719eb4bfd6c3a99672b8bacb7e3697f70308bde14e202ad03eb130"},{"file":"scripts/data-verify.ts","bytes":1370,"sha256":"6ff35b4952772ee575ad5b8c9ba527fc8917c100120ed61d8fefe3316d64d89f"},{"file":"scripts/deny-network.cjs","bytes":449,"sha256":"929767c13c70256a7db954a7975c63d627ac1fd7ad5ea342fcb85b862c423814"},{"file":"scripts/export-accepted.py","bytes":5605,"sha256":"983072681433a57abb84c2b6089af3a2f35afc89c55a809bd597ea40c83bd11d"},{"file":"scripts/reconstruct.ts","bytes":10299,"sha256":"137b4b7b0e1b0ed11d2bd78cadb327a683b2e0967d5f6ffef20100fd959eb013"},{"file":"scripts/release.ts","bytes":1314,"sha256":"d5986e6e27a2e2d40dd0c28282258906fd8b16962315212791c211043aea55de"},{"file":"scripts/reproduce.ts","bytes":4017,"sha256":"02a70aff069c6c14c29e3e28a9c81b4de9e237b2d5e88712cbef3af1030c58f6"},{"file":"scripts/snapshot.ts","bytes":409,"sha256":"1d8cd3132c409129531b2bfe56b6d2367970901b4546dd199fefddf3a17c2fc9"},{"file":"scripts/tasks.ts","bytes":1512,"sha256":"bae388aa1ecca96df756290cab29915196d6972ae41a7ce6cc2412ee4a217670"},{"file":"scripts/verify-chain.ts","bytes":4820,"sha256":"62570a319e8871e6439724b3831d7b9f658c689af076ed41b22ae9bb38a73622"},{"file":"snapshots/initial/release.json","bytes":1615,"sha256":"6c44fdfea6f56c3561b8edd9fe79ad8b5f87099a41611185dbdcd97615d3117e"},{"file":"src/abi.ts","bytes":300,"sha256":"b6e5ada13d7d83936c84f1263d49e0654ea98fdfe1c5b1eb214b4a6368269431"},{"file":"src/archive.ts","bytes":3694,"sha256":"d345fb948cdf9edcd74d57515d251ebf0aca438e1b5b10223aca491550a8b92e"},{"file":"src/binary-gates.ts","bytes":1597,"sha256":"87530e2efa70cfe1143d99418bc1011892a7dbcc65287b1174fc659945859f09"},{"file":"src/bundle.ts","bytes":2938,"sha256":"d1d8fd48fd4c17847785c89e1482ca875b4ea31084e3412588e0a7802b8e776e"},{"file":"src/chain.ts","bytes":5936,"sha256":"341d2a342372a1d53bebc1758f3bc1b71cb4bb81e742c8c7dcb39c83ec8baeb7"},{"file":"src/incremental-merkle.ts","bytes":632,"sha256":"d0102e3a69e364da825d9e1e8c9cc1784a1e755d538927a2f083212de138d9e8"},{"file":"src/initial.ts","bytes":6073,"sha256":"f44890378f00581eb839a614b86dc459b84de08359e7a294e25d989328f16fcd"},{"file":"src/integrity.ts","bytes":1745,"sha256":"e59a4a61a7eac9e375da2be0d5afa919a23492abb11fb9c25be00e5d57974d27"},{"file":"src/merkle.ts","bytes":515,"sha256":"d09eaecfe131411b62272f35b122dce7fc0442ac9099d1b3ca6850eec2b226a7"},{"file":"src/micro-core.ts","bytes":2089,"sha256":"5519fea2892f88931f3e4e1e91525f8288dedbdb017244eb3c2df8cbe07bf6cf"},{"file":"src/micro-netlist.ts","bytes":1111,"sha256":"bd37267b9fb73eb28a2a4d0e05a2fcfd5059a01ff0066f5a8733b82e84cf8236"},{"file":"src/model.ts","bytes":150,"sha256":"8a2c937e77dcd2dd7ac0c9ed462f7e5fea82a62f6b251d5af06d7f2995be34ba"},{"file":"src/netlist.ts","bytes":6728,"sha256":"f5e73682580f6c57f82df7ad257d455735c40307fe3518a95be330a2851d3500"},{"file":"src/packed-io.ts","bytes":2991,"sha256":"45500751ce8f3d7ae97036652b67ee3fa3b4087ce1e54db0905e5d226bb66b59"},{"file":"src/packed-micro.ts","bytes":12426,"sha256":"0d5af0484e53a76aef05f555fa28f78d70f9413d19ecfc7b2a7f764b9e7afc64"},{"file":"src/packed-runtime.ts","bytes":1338,"sha256":"030cbbfe710b398b9aadc7dc474261d696bc1b36567dcc58ff832b8537214fd6"},{"file":"src/reference.ts","bytes":1239,"sha256":"31deb685d5e8e9fca8c04e8dc7207f377552f6d7922bcd30116db5ee472352af"},{"file":"src/snapshot.ts","bytes":3142,"sha256":"189430b82ef762243941d84c1abc2a78d84debf4ccad45cbbad6dcba92e1ef8a"},{"file":"src/synthesis.ts","bytes":2927,"sha256":"7c644f1cbac8f67be6f826d5445c8c4a3b5aa18e4f9605ef4d463289500a0824"},{"file":"src/t2-local-checkpoint.ts","bytes":1440,"sha256":"2cd739b20af83bce805ffbcd9e190414ebc40a3bf7e8c0ab0e121985097e0c97"},{"file":"test/bundle.test.ts","bytes":2528,"sha256":"95f7a4f0ad83ae779c7868da8d62dbe800c1548638f2d3c9626949e2e815fb69"},{"file":"test/chain.test.ts","bytes":2955,"sha256":"bec89ccb73b858f51d132307e71945fdd68dbba062023b97a8c19caa311b9612"},{"file":"test/checkpoint.test.ts","bytes":1364,"sha256":"44fccc69f22c5d9038bc40d2e5d635255d7ff36451475909f5e1bfda9037f0b9"},{"file":"test/core.test.ts","bytes":2068,"sha256":"f6f9dea4b51cc8cb931d6f3e30f600dd4f38f9feee44d3be23fceef745635ef1"},{"file":"test/fixture.ts","bytes":540,"sha256":"104a4b40189f4998da5ee139b73cfde2dd2962a50b1634913754a3a05608afd6"},{"file":"tsconfig.json","bytes":326,"sha256":"797d4aaae03bb7353564874d440eb02658d5765d92bcb860fd7942abbc172a58"}]}
++{"schema":"droso-public-files-v1","files":[{"file":".env.example","bytes":81,"sha256":"6b1dc8daffa946cd7e94e1665e923d42cc2f8f6b7c421c83a6313f56580b4fb8"},{"file":".github/workflows/reproduce.yml","bytes":1561,"sha256":"9170e5d3e17d9825b53c70f7ed4a1e073f9362e6e67cade96daba57aa893a250"},{"file":".gitignore","bytes":55,"sha256":"a508a681d769a78fcdf49a0d68c2a3430af7b7a1e3076c1944c3bd31e75b1eae"},{"file":"LICENSE","bytes":1087,"sha256":"0fec3e1d5b6929fd31a81633f2bff635c2b89962a808324002be3c47027fc4ac"},{"file":"NOTICE.md","bytes":2320,"sha256":"24c2256ca4eb14398281dc5374173ad4d24ed27f86386bd7d4fcaacd8579bade"},{"file":"README.md","bytes":8505,"sha256":"db602b222845f8ee2364d3c608cd9b8d6df3a0da39ed8b5911d84c6c26b9c314"},{"file":"abi/CircuitFactory.json","bytes":8184,"sha256":"00429f2b439fb2b813286d4faaff35426d2413db79cf64c57ce57b762eda7faf"},{"file":"abi/Circuits.json","bytes":8809,"sha256":"cffbfd891180e406bdf6e8343788a9af0c43ae6671f815113ecbd288bb4cde2e"},{"file":"abi/Transistors.json","bytes":9619,"sha256":"9112cf3763b9540e4075d7b669d75db568e6e1d22686349fc45db58f674c329c"},{"file":"build/BrainAssemblyMicroPages.json","bytes":134878,"sha256":"abf8e8f0fc778e576084d52e7a13e3feda673c6368153a2a1a666f1e32de0fba"},{"file":"build/MicroDataPage.json","bytes":960,"sha256":"07763b03a98cc8f47b203d4e18931b02320e04e79988969b578b86aebd1b471b"},{"file":"build/StaticMicroData.json","bytes":31953,"sha256":"bda7f21455e04b9b9c351e935c4c118a87f8ee353e48de1cfa0021fac199e05e"},{"file":"build/build-info.json","bytes":314,"sha256":"2e73f0059866a9e44ad20ae41113ca44d26b318105a3c1a7c01d9220c167cf32"},{"file":"build/compiler-input.json","bytes":36965,"sha256":"d96e49a07a2af9a9cd53640b133ef391747e5d2976aaf40ca382fd84ad682a27"},{"file":"bundles/export-manifest.json","bytes":183487,"sha256":"d0cba834a4a7a154cdb95bfd97c4136a1281c94c9cd469299d926780d87dc50e"},{"file":"bundles/snapshot-000.bin.gz","bytes":549148,"sha256":"856f0c3e166c8a23e5737482f743c724526224ff237a5e5516685a6e496ab17a"},{"file":"bundles/snapshot-001.bin.gz","bytes":499123,"sha256":"2cf48fbde8f9918996c7fab8768f85f45c4eff86e9f240babb3737156712cde8"},{"file":"bundles/snapshot-002.bin.gz","bytes":493532,"sha256":"625b7eb0bfd2d501179506468e5ec532294c5a6ace40bffe01c7b9f55925db43"},{"file":"bundles/snapshot-003.bin.gz","bytes":499959,"sha256":"e8e67d541a14a28fa69d858f83aa6f194d611f690c9e9c932d7e6708f03441ae"},{"file":"bundles/snapshot-004.bin.gz","bytes":2955651,"sha256":"653d8cb9cee0870d055eeb682fdcc60b148f37d57c6f8396fc83ceb5ac1aa165"},{"file":"bundles/snapshot-005.bin.gz","bytes":4272605,"sha256":"553e332468b90af06fd99bbe69c49fda32aa2144e3d730d5a875a8d5c6262110"},{"file":"bundles/snapshot-006.bin.gz","bytes":4371330,"sha256":"3e8597ce4e3d0b7b184be6712be7002fc6cc44e822c4785d4153f116a03560e9"},{"file":"bundles/snapshot-007.bin.gz","bytes":4433924,"sha256":"c7a69c24a86403f1c0aa5c0d708431289b3d5dc1d8eb728090942743f0d84e9e"},{"file":"bundles/snapshot-008.bin.gz","bytes":4480276,"sha256":"bf560efd1ecb67ebdadc264045724926726864bb364b787b904901be31ca7fae"},{"file":"bundles/snapshot-009.bin.gz","bytes":4515150,"sha256":"d00e43434c5d4637e52c811670be431ad09bc03694a1e81e020092f6673c3b7f"},{"file":"bundles/snapshot-010.bin.gz","bytes":4552876,"sha256":"a3a92bbd49a33b823656f1fd770aac972613fdb8b7ab7023f612706c8590630a"},{"file":"bundles/snapshot-011.bin.gz","bytes":4589438,"sha256":"819b660ae900cbc3b5765bc4531ace020115fde89e89481246c940dc228367be"},{"file":"bundles/snapshot-012.bin.gz","bytes":4617133,"sha256":"18ae1fb019ee7beb63c9211c66cac939e6233902bdcfca5a22b584a27d6ab355"},{"file":"bundles/snapshot-013.bin.gz","bytes":4638897,"sha256":"34eddd31097c465f1f64a2630251bca0094c8aff9858cd1d3bc805ff0588a453"},{"file":"bundles/snapshot-014.bin.gz","bytes":4653647,"sha256":"2b46d66e13ab7e9858ade0c73c864f448f42f94600b963834853165d30aa871f"},{"file":"bundles/snapshot-015.bin.gz","bytes":4669107,"sha256":"0535ad8af7651a409c0b5f0181360e3aa7a1e11dc0b60a0c7e03c83c0f2aa96e"},{"file":"bundles/snapshot-016.bin.gz","bytes":4685281,"sha256":"727183e5b0b55ff3715de7ac414e9e3833d5039d5a37cf9b9493815104e513f3"},{"file":"bundles/snapshot-017.bin.gz","bytes":4700382,"sha256":"c0d683f504c2eefd7a15d7b91f833f4ae1144f9677ef62bbaefdd9e9d768b8ad"},{"file":"bundles/snapshot-018.bin.gz","bytes":4732084,"sha256":"298fb6d2f364f766048cace0257b797f84452f48728ec1470440b3933c6d618e"},{"file":"bundles/snapshot-019.bin.gz","bytes":4775856,"sha256":"ae1483c63b9f830930e153482e5fb09d70193737998ede82f7ca13b399039032"},{"file":"bundles/snapshot-020.bin.gz","bytes":4785776,"sha256":"99acd009cffbf6aa16294b7c5eea99bbbf2ba0c0b0bf5ea5c1b833a4949f0b62"},{"file":"bundles/snapshot-021.bin.gz","bytes":4767043,"sha256":"bb1129636ae19d5aa707bf912832553ddb268a805a3c7e7071052c06e8fa6507"},{"file":"bundles/snapshot-022.bin.gz","bytes":4747255,"sha256":"ae500ca1a24defe16ea42b3b5a351f3fc0efb0ef1689f222fc262f70b52688bd"},{"file":"bundles/snapshot-023.bin.gz","bytes":4550709,"sha256":"a0f1b94123e633eb383ac448914942ac021c2a2b4bc577cbf79a3e7351a2b671"},{"file":"bundles/snapshot-024.bin.gz","bytes":4509138,"sha256":"61576fcdf110186e9d9db1d181428ca70cb855900bb870c7a5b47d5e487fc23a"},{"file":"bundles/snapshot-025.bin.gz","bytes":4672442,"sha256":"af000cddc1c50265ce57ce148877d9b09f1b6e6e83ff8612ca9a49eeebf7c421"},{"file":"bundles/snapshot-026.bin.gz","bytes":4408915,"sha256":"05ab9063706c6ec896de52f082e3dfccfaa1d8b212d8b8a3ea502b5b0dbcb4a0"},{"file":"bundles/snapshot-027.bin.gz","bytes":4411529,"sha256":"f329f4f05af22002e68fb5531cce334788e0406938c0eb8f263447ba5841b702"},{"file":"bundles/snapshot-028.bin.gz","bytes":4513671,"sha256":"ba9fe0fa5d9de864202253b250501965445dce2e72ce6b996fb251e0f6c8f3fa"},{"file":"bundles/snapshot-029.bin.gz","bytes":5147516,"sha256":"f722763e7b558ef17769afb39fe39d53a4b6eaae314442c88ea68b4905fddfd0"},{"file":"bundles/snapshot-030.bin.gz","bytes":2857168,"sha256":"fe0f12aaa4c6b67fafd72d3d44a9d56739c74c40a74ee83c00c212f3c6c18eaf"},{"file":"contracts/BrainAssembly.sol","bytes":10797,"sha256":"9f3c1035c5669a031a136fd81ff9f91ebcd3e0b462a6807d57f6b12e6e1b06c1"},{"file":"contracts/BrainAssemblyMicroPages.sol","bytes":18991,"sha256":"1e869624acfb85ea2b4fd6753eafea89f8dab1493e6759e72e8538456677d116"},{"file":"contracts/StaticMicroData.sol","bytes":6362,"sha256":"ede0b0d22a5d16b09e3a75127bdc7a4819cecb52a00e3998e32327c15828c01d"},{"file":"core/ABC-LICENSE","bytes":1129,"sha256":"819151b8f059a48f806c75732ef62b1f873b49b6a04fb128aed28bf87d3dcd6c"},{"file":"core/core.bin","bytes":404,"sha256":"94a289de04d23291fdacb38effdc95ba28b025b69e978505fab8c8565013f6fb"},{"file":"core/selected.blif","bytes":1926,"sha256":"fedd05ce71024ca6035bec6c1949f58aa4909328f11ec396bd905c51ce6673f2"},{"file":"deployments/bsc-testnet/custody-fingerprint.json","bytes":337,"sha256":"2aee985b060f0fc49db11866e0cac1299b1076e2ee8b44f8aa993a0b62478044"},{"file":"deployments/bsc-testnet/deployment.json","bytes":2280,"sha256":"33ecc8ead1beca06ddf439f5462e69fdd5b7d295cb47f61b53fd08e31cc33249"},{"file":"deployments/bsc-testnet/local-acceptance-signed.json","bytes":1501,"sha256":"95efd03a61baa3918f1bb0f8ecca43007dfe3be9bb450a6d77844dbc9c2df877"},{"file":"deployments/bsc-testnet/page-config.json","bytes":239,"sha256":"6ffe1e75bcd8f645def3cb85dbcb3d229d4ce95be9dd27eac7b8a8155d4cd38b"},{"file":"deployments/bsc-testnet/protocol-lock.json","bytes":2594,"sha256":"de89dbc31aa7384b074bbcf46872fa83d92bee1019928f0201b78e958a28bd2f"},{"file":"deployments/bsc-testnet/ready.json","bytes":1432,"sha256":"8a15371bfd7dc1321e729b126a319aff59044af6b6d1fd467729362458bcb958"},{"file":"deployments/bsc-testnet/rebuild-report.json","bytes":1544,"sha256":"8832c9e2230115195cccbc30cd69fddfc67093dbf034901aed740e9279718347"},{"file":"docs/ACCEPTANCE.md","bytes":3830,"sha256":"1e743cb48734647d41670a89fb28d1e25818a24705d77f8c3d1e5634dccaf344"},{"file":"docs/FORMAT_AND_BUILD.md","bytes":4173,"sha256":"d16cda16215588794fe92c1f08407b8906a9162ef4e5ae0918dc2c544db68d1d"},{"file":"docs/HISTORICAL_VERIFY.md","bytes":3166,"sha256":"9a66bf720180f0c4b42ff74875752bd04a36a99171930807053af43dc8a4fee1"},{"file":"docs/MODEL_AND_DATA.md","bytes":4374,"sha256":"da43ffc3ad60a828c02fd80005873e24c29c423831832b73950f3391a51d4792"},{"file":"docs/PUBLISHING.md","bytes":2176,"sha256":"2f289761bb6d8f03e26b1f170c5a81eb65686ff86fd5612ed1efc90e016b2c90"},{"file":"docs/SECURITY_AND_COSTS.md","bytes":3831,"sha256":"508d508b674923a465cbbb76433aa570ff84107bf080e5babbbe9b554fbd28c8"},{"file":"docs/data-model.json","bytes":7489,"sha256":"21cc25f1959130ed76681a93515d7949509cd0940543a7a74215a0063b9e31fd"},{"file":"evidence/chain-identities.json","bytes":124660,"sha256":"897b7cb26e3352fa64f2e8fc0ff5b664d71a9948fb2dd0c8907df4f48ae08124"},{"file":"evidence/clean-full-run.json","bytes":1272,"sha256":"75348e3dab3fe52424bb278b92727b0d947a46d47376626b57319fbcee3dd0d9"},{"file":"evidence/clean-isolation.json","bytes":231,"sha256":"94af5defdc76d51704b422841c850a1733c52d0fa9e59b54f747289f32a17b68"},{"file":"evidence/clean-partial.json","bytes":976,"sha256":"01d63a276211763ab3e75cb08b8de7c3fd802829a2c909c2a06a659e3cbbdf11"},{"file":"evidence/clean-resumed.json","bytes":1290,"sha256":"8de4dc684d92d1301b525b54dd1b7953a09ec0f5b25e57199d3f421d839a0739"},{"file":"evidence/new-reader-no-rpc.json","bytes":65,"sha256":"f725ca81c06ab773501d306c9318098a620be47b4c3d0ea77b853f19d5f9d5f2"},{"file":"evidence/new-reader-sample.json","bytes":1083,"sha256":"881ae8d77f0452a82c4546707b5a032e7077cc307408e4a3ff6dabe5c655cb3b"},{"file":"evidence/privacy-scan.json","bytes":437,"sha256":"4d8d82193236d03eb590fd854c464d82b4b6db79b7c48f29670ed6ec5b5774eb"},{"file":"evidence/tool-tests.json","bytes":834,"sha256":"16e91dcacb193ac7f4c160e7947bc66f66a545290cc09f9be113552518b138c1"},{"file":"expected/states-manifest.json","bytes":692,"sha256":"0154bf8ccad54a5c82dc9cbfc1e6cd9511a6e06e69e1709ce123e3ae3fd1ac89"},{"file":"expected/step1.states.txt.gz","bytes":572971,"sha256":"24a3c6f9cd311fe4c939835ad28e9679cc9f8f31436ceacfb9dacbaebad1ec1c"},{"file":"expected/step2.states.txt.gz","bytes":642054,"sha256":"245c6210c9ef0ac0077ceb40cffb504a56610819b1e223fafe6761fc0b660db0"},{"file":"expected/steps.json","bytes":429,"sha256":"31dd0629ead86b56d9f8979c3b39cce55dca7083c9474f81835488add37bd0d9"},{"file":"licenses/@adraffy_ens-normalize-LICENSE","bytes":1077,"sha256":"3b458813ab3316b16bf004c4201d4a0583cf615514422dabf4d7c025988d613d"},{"file":"licenses/@noble_ciphers-LICENSE","bytes":1161,"sha256":"f36671a5487c9c5050efacb58011c37c24c55a889803cb036cf9d9a6347c1e2d"},{"file":"licenses/@noble_curves-LICENSE","bytes":1109,"sha256":"4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"},{"file":"licenses/@noble_hashes-LICENSE","bytes":1109,"sha256":"4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"},{"file":"licenses/@scure_base-LICENSE","bytes":1110,"sha256":"3239e134eb6e6d64538ca76498c7fcb08a395249dd9d4af9927bf6d0169ee429"},{"file":"licenses/@scure_bip32-LICENSE","bytes":1122,"sha256":"1565efd0ec4580bfaa96c7eeaaa9af3791baa1cc562c3bde62d0a055910b9ec7"},{"file":"licenses/@scure_bip39-LICENSE","bytes":1122,"sha256":"1565efd0ec4580bfaa96c7eeaaa9af3791baa1cc562c3bde62d0a055910b9ec7"},{"file":"licenses/@types_node-LICENSE","bytes":1141,"sha256":"c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"},{"file":"licenses/ABC-LICENSE","bytes":1129,"sha256":"819151b8f059a48f806c75732ef62b1f873b49b6a04fb128aed28bf87d3dcd6c"},{"file":"licenses/abitype-LICENSE","bytes":1074,"sha256":"e7f5360a60628940fee8653802d7221d2b9575e26268be2a3a2fdbc04aa84321"},{"file":"licenses/command-exists-LICENSE","bytes":1082,"sha256":"f1354634fd0ced0354bd5b5fe17f4e613f069850bfedaab00c8fd78f6bc77d5e"},{"file":"licenses/commander-LICENSE","bytes":1098,"sha256":"04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b"},{"file":"licenses/dependencies.json","bytes":3238,"sha256":"e0e47b5e29de0f7429c27b7e69010f497720f90a2995a2bb2a968e76b0abe02d"},{"file":"licenses/eventemitter3-LICENSE","bytes":1082,"sha256":"3aecc12b1cb28832b5f65ab64291de96568c3f236a74d646281b4491f7bcadbf"},{"file":"licenses/follow-redirects-LICENSE","bytes":1136,"sha256":"bfa8a54bb952ccda79f0f1889721d108f5b605babbb2b8a3705ffb52f4132eb7"},{"file":"licenses/isows-LICENSE","bytes":1074,"sha256":"091d17ae5f625ffeb381e7109daaf6c492dd32502d612d8ecd24e2ddf6d16b74"},{"file":"licenses/js-sha3-LICENSE.txt","bytes":1059,"sha256":"17b4068b7283f1e9a41b196e3662d4b37cf6f3265173622929d352f5ecdda231"},{"file":"licenses/memorystream-LICENSE","bytes":1059,"sha256":"0077a46edebed7dbeb627dcf8643f5aa07af296fc3699c43a34d095311a856a9"},{"file":"licenses/os-tmpdir-license","bytes":1119,"sha256":"6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c"},{"file":"licenses/ox-LICENSE","bytes":1068,"sha256":"84ecb61c470de66e88a79c7d0ee8ce068e743693a4c249017545b4c8d4f9984d"},{"file":"licenses/semver-LICENSE","bytes":765,"sha256":"4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"},{"file":"licenses/solc-LICENSE","bytes":1067,"sha256":"852bcc033a46c62f99fb5ffd43b3241ba2c0c440c6034aa2114505f2c4f03c4a"},{"file":"licenses/tmp-LICENSE","bytes":1082,"sha256":"162413c61e0982abe89a06bf7a02ec760dc49a7364d838bd9f01daebb5b95954"},{"file":"licenses/typescript-LICENSE.txt","bytes":9197,"sha256":"a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"},{"file":"licenses/undici-types-LICENSE","bytes":1090,"sha256":"a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27"},{"file":"licenses/viem-LICENSE","bytes":1074,"sha256":"091d17ae5f625ffeb381e7109daaf6c492dd32502d612d8ecd24e2ddf6d16b74"},{"file":"licenses/ws-LICENSE","bytes":1183,"sha256":"2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef"},{"file":"package-lock.json","bytes":11989,"sha256":"82263c77db32da5155e4ae13f91a7053f44c96dca9fdb58f5b74c43de584f05c"},{"file":"package.json","bytes":1256,"sha256":"0b04b3ed4e3c30ddc4c33dadf8d866121b8fc4fbafecdc3a17fb28b8216d0671"},{"file":"scripts/build-contracts.ts","bytes":1134,"sha256":"fbf71f099618e81fd6035ac2c1bc7c429e70c16ae4361e2faab2ea0590a9b150"},{"file":"scripts/check-docs.ts","bytes":811,"sha256":"e4288b21f93e5ce1812ec44008acd2ec3826763dcaf82aaba4f878d0f843beca"},{"file":"scripts/check-files.ts","bytes":619,"sha256":"11d130f1ca660e69a87c99885185670cf6916c7e6dfbdc2732fb080572584447"},{"file":"scripts/check-result.ts","bytes":1198,"sha256":"71a35af9e8097bc9c9f2f51602d6bcc20fbfec124cb3b31b69015a053c180e33"},{"file":"scripts/ci-offline.sh","bytes":686,"sha256":"194cb6a4fb980f43f1bd932fee35dd14bc3b48bcaeb4e8a39cf7aa9272ac459c"},{"file":"scripts/core.ts","bytes":481,"sha256":"bf942af39b719eb4bfd6c3a99672b8bacb7e3697f70308bde14e202ad03eb130"},{"file":"scripts/data-verify.ts","bytes":1370,"sha256":"6ff35b4952772ee575ad5b8c9ba527fc8917c100120ed61d8fefe3316d64d89f"},{"file":"scripts/deny-network.cjs","bytes":610,"sha256":"9194388890ff87389d254538116792c52b888c2a2af398e1096168446602ef05"},{"file":"scripts/export-accepted.py","bytes":5605,"sha256":"983072681433a57abb84c2b6089af3a2f35afc89c55a809bd597ea40c83bd11d"},{"file":"scripts/files-update.ts","bytes":151,"sha256":"a4e3d9e0ae5ee4a76e1c247d33222edc370dc7c0f0badc0b44c3d82dcc167a07"},{"file":"scripts/reconstruct.ts","bytes":10299,"sha256":"137b4b7b0e1b0ed11d2bd78cadb327a683b2e0967d5f6ffef20100fd959eb013"},{"file":"scripts/release.ts","bytes":841,"sha256":"688acabb2686dab5bc0941fc06ce3bd8c6181467d0da4503ffc28afd476700cf"},{"file":"scripts/reproduce.ts","bytes":4250,"sha256":"74ebe6380df6af45f876a3981736f1146fdf5bf61c868bde19c2b6e11e27b5b4"},{"file":"scripts/snapshot.ts","bytes":409,"sha256":"1d8cd3132c409129531b2bfe56b6d2367970901b4546dd199fefddf3a17c2fc9"},{"file":"scripts/source-identity.ts","bytes":105,"sha256":"550e4e80e3888c5e47b0157e80faa4c21187918bd712f5dd3bfb15121ca9fba4"},{"file":"scripts/tasks.ts","bytes":1512,"sha256":"bae388aa1ecca96df756290cab29915196d6972ae41a7ce6cc2412ee4a217670"},{"file":"scripts/verify-chain-full-run.ts","bytes":6445,"sha256":"a2cc14b2da3d53f3391c4fa7fbeb0f021cdc70ba0d83684f55c5351ad97c19c3"},{"file":"scripts/verify-chain.ts","bytes":6334,"sha256":"af82e976b3edc9238a62d593bd319d71c8c8d3b5bc9b704ed009656a3964382b"},{"file":"snapshots/initial/release.json","bytes":1615,"sha256":"6c44fdfea6f56c3561b8edd9fe79ad8b5f87099a41611185dbdcd97615d3117e"},{"file":"src/abi.ts","bytes":300,"sha256":"b6e5ada13d7d83936c84f1263d49e0654ea98fdfe1c5b1eb214b4a6368269431"},{"file":"src/archive.ts","bytes":3694,"sha256":"d345fb948cdf9edcd74d57515d251ebf0aca438e1b5b10223aca491550a8b92e"},{"file":"src/binary-gates.ts","bytes":1597,"sha256":"87530e2efa70cfe1143d99418bc1011892a7dbcc65287b1174fc659945859f09"},{"file":"src/bundle.ts","bytes":2938,"sha256":"d1d8fd48fd4c17847785c89e1482ca875b4ea31084e3412588e0a7802b8e776e"},{"file":"src/chain-progress.ts","bytes":2376,"sha256":"7a6e61edb31bb1b20465c5d94bdd56fe020f164aa2ee8d7d77799a7bd0748fcd"},{"file":"src/chain.ts","bytes":6481,"sha256":"2ad7ee8db17d72818de35748ff7a5ad2c4d30c7eb992cc50d0b4d8e28d0035d5"},{"file":"src/incremental-merkle.ts","bytes":632,"sha256":"d0102e3a69e364da825d9e1e8c9cc1784a1e755d538927a2f083212de138d9e8"},{"file":"src/initial.ts","bytes":6073,"sha256":"f44890378f00581eb839a614b86dc459b84de08359e7a294e25d989328f16fcd"},{"file":"src/integrity.ts","bytes":1745,"sha256":"e59a4a61a7eac9e375da2be0d5afa919a23492abb11fb9c25be00e5d57974d27"},{"file":"src/merkle.ts","bytes":515,"sha256":"d09eaecfe131411b62272f35b122dce7fc0442ac9099d1b3ca6850eec2b226a7"},{"file":"src/micro-core.ts","bytes":2089,"sha256":"5519fea2892f88931f3e4e1e91525f8288dedbdb017244eb3c2df8cbe07bf6cf"},{"file":"src/micro-netlist.ts","bytes":1111,"sha256":"bd37267b9fb73eb28a2a4d0e05a2fcfd5059a01ff0066f5a8733b82e84cf8236"},{"file":"src/model.ts","bytes":150,"sha256":"8a2c937e77dcd2dd7ac0c9ed462f7e5fea82a62f6b251d5af06d7f2995be34ba"},{"file":"src/netlist.ts","bytes":6728,"sha256":"f5e73682580f6c57f82df7ad257d455735c40307fe3518a95be330a2851d3500"},{"file":"src/packed-io.ts","bytes":2991,"sha256":"45500751ce8f3d7ae97036652b67ee3fa3b4087ce1e54db0905e5d226bb66b59"},{"file":"src/packed-micro.ts","bytes":12426,"sha256":"0d5af0484e53a76aef05f555fa28f78d70f9413d19ecfc7b2a7f764b9e7afc64"},{"file":"src/packed-runtime.ts","bytes":1338,"sha256":"030cbbfe710b398b9aadc7dc474261d696bc1b36567dcc58ff832b8537214fd6"},{"file":"src/public-files.ts","bytes":819,"sha256":"177581d363aaa742ade7edc59e53cf1cba713119ec46df68893a41d87ec6365a"},{"file":"src/reference.ts","bytes":1239,"sha256":"31deb685d5e8e9fca8c04e8dc7207f377552f6d7922bcd30116db5ee472352af"},{"file":"src/snapshot.ts","bytes":3142,"sha256":"189430b82ef762243941d84c1abc2a78d84debf4ccad45cbbad6dcba92e1ef8a"},{"file":"src/source-identity.ts","bytes":803,"sha256":"b41e8aae4217f9f3d9addc5df9a93c53e6ff2f9c077c73e045683d639623f82f"},{"file":"src/synthesis.ts","bytes":2927,"sha256":"7c644f1cbac8f67be6f826d5445c8c4a3b5aa18e4f9605ef4d463289500a0824"},{"file":"src/t2-local-checkpoint.ts","bytes":1440,"sha256":"2cd739b20af83bce805ffbcd9e190414ebc40a3bf7e8c0ab0e121985097e0c97"},{"file":"test/bundle.test.ts","bytes":2528,"sha256":"95f7a4f0ad83ae779c7868da8d62dbe800c1548638f2d3c9626949e2e815fb69"},{"file":"test/chain-progress.test.ts","bytes":2376,"sha256":"bb8552aac156d2b174f846266c77d2f439b8cb36ae070a254b6db6f3952efcb5"},{"file":"test/chain.test.ts","bytes":3951,"sha256":"a0c7d92b111b9f949b6963f86c6d2cbd6a1ef1a30030a8332c93c460492e7216"},{"file":"test/checkpoint.test.ts","bytes":1364,"sha256":"44fccc69f22c5d9038bc40d2e5d635255d7ff36451475909f5e1bfda9037f0b9"},{"file":"test/core.test.ts","bytes":2068,"sha256":"f6f9dea4b51cc8cb931d6f3e30f600dd4f38f9feee44d3be23fceef745635ef1"},{"file":"test/fixture.ts","bytes":540,"sha256":"104a4b40189f4998da5ee139b73cfde2dd2962a50b1634913754a3a05608afd6"},{"file":"tsconfig.json","bytes":326,"sha256":"797d4aaae03bb7353564874d440eb02658d5765d92bcb860fd7942abbc172a58"}]}
+diff --git a/package.json b/package.json
+index 5a24b80..e050d94 100644
+--- a/package.json
++++ b/package.json
+@@ -20,7 +20,11 @@
+     "core:verify": "node scripts/core.ts",
+     "tasks:export": "node scripts/tasks.ts",
+     "files:verify": "node scripts/check-files.ts",
+-    "result:verify": "node scripts/check-result.ts"
++    "result:verify": "node scripts/check-result.ts",
++    "files:update": "node scripts/files-update.ts",
++    "verify:chain:full-run": "node scripts/verify-chain-full-run.ts",
++    "source:identity": "node scripts/source-identity.ts",
++    "docs:verify": "node scripts/check-docs.ts"
+   },
+   "dependencies": {
+     "viem": "2.56.5"
+diff --git a/scripts/deny-network.cjs b/scripts/deny-network.cjs
+index fbdc050..1d71267 100644
+--- a/scripts/deny-network.cjs
++++ b/scripts/deny-network.cjs
+@@ -1,5 +1,7 @@
+-// Clean-environment reproduction harness only: any networking attempt fails the run.
+-const deny=()=>{throw Error('OFFLINE_NETWORK_FORBIDDEN');};
++// Test harness: fail on attempted networking rather than assert an unmeasured zero.
++const state={mode:'NODE_NETWORK_APIS_BLOCKED',attempts:0};
++Object.defineProperty(globalThis,'__drosoNetworkGuard',{value:state,writable:false});
++const deny=()=>{state.attempts++;throw Error('OFFLINE_NETWORK_FORBIDDEN');};
+ globalThis.fetch=deny;
+ for(const name of ['node:net','node:tls','node:http','node:https','node:dgram','node:dns']){const m=require(name);for(const k of ['connect','createConnection','request','get','createSocket','lookup','resolve'])if(k in m)m[k]=deny;}
+ require('node:module').syncBuiltinESMExports();
+diff --git a/scripts/release.ts b/scripts/release.ts
+index 9fbc02a..af998e4 100644
+--- a/scripts/release.ts
++++ b/scripts/release.ts
+@@ -1,5 +1,4 @@
+ import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';import {fileHash,atomic} from '../src/integrity.ts';
+-const skip=new Set(['.git','node_modules','.cache','results','release','.env','.DS_Store']),files:string[]=[];
+-function walk(dir:string){for(const name of fs.readdirSync(dir).sort()){if(skip.has(name))continue;const f=path.join(dir,name),s=fs.lstatSync(f);if(s.isSymbolicLink())throw Error('RELEASE_SYMLINK');if(s.isDirectory())walk(f);else if(s.isFile()&&f!=='checksums/files.json')files.push(f);}}
+-walk('.');atomic('checksums/files.json',{schema:'droso-public-files-v1',files:files.map(file=>({file,bytes:fs.statSync(file).size,sha256:fileHash(file)}))});
++import {writeInventory} from '../src/public-files.ts';
++const files=writeInventory();
+ fs.mkdirSync('release',{recursive:true});const out='release/droso-1.0.0.tar.gz';if(fs.existsSync(out))throw Error('FRESH_RELEASE_REQUIRED');const list='release/files.txt';fs.writeFileSync(list,[...files,'checksums/files.json'].join('\n')+'\n');const p=spawnSync('tar',['-czf',out,'-T',list],{env:{PATH:process.env.PATH,COPYFILE_DISABLE:'1'},stdio:'inherit'});if(p.status!==0)throw Error('RELEASE_PACK_FAILED');atomic('release/archive.json',{file:path.basename(out),bytes:fs.statSync(out).size,sha256:fileHash(out),publicFiles:files.length+1});console.log(fs.readFileSync('release/archive.json','utf8'));
+diff --git a/scripts/reproduce.ts b/scripts/reproduce.ts
+index a38f1b8..7cf1224 100644
+--- a/scripts/reproduce.ts
++++ b/scripts/reproduce.ts
+@@ -1,4 +1,5 @@
+ import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import assert from 'node:assert/strict';
++import {sourceIdentity} from '../src/source-identity.ts';
+ import {prepare} from '../src/initial.ts';import {readJSON,atomic,digest} from '../src/integrity.ts';
+ import {localCheckpointPath,saveLocalCheckpoint} from '../src/t2-local-checkpoint.ts';import {reference,compareState} from '../src/reference.ts';
+ const arg=(s:string)=>{const i=process.argv.indexOf(s);return i<0?undefined:process.argv[i+1];};
+@@ -9,4 +10,4 @@ const expected=readJSON('expected/steps.json').steps;let refV=rt.v.slice(),refS=
+ while(rt.step<steps){if(!rt.active)rt.begin();const began=performance.now();for(let j=0;j<rt.modules;j++){const slot=rt.step%2?j:rt.modules-1-j;while(!rt.done(slot)){const n=Math.min(65536,rt.remaining(slot));rt.advance(slot,n);ops+=n;if(ops>=nextLog){console.log(JSON.stringify({event:'gate-progress',step:rt.step+1,completedModules:rt.completed,totalModules:rt.modules,operations:ops,elapsedMs:performance.now()-start}));nextLog+=50000000;}
+  if((process.argv.includes('--save-partial-and-exit')&&ops>=70001)||performance.now()-start>600000||process.memoryUsage().rss>1610612736){partial=true;break;}}
+  if(partial)break;}if(partial)break;rt.commit();const ref=reference(loaded.plan,refV,refS,loaded.plan.frames[rt.step-1]);const fd=fs.openSync(out+'/step'+rt.step+'.states.txt','wx');let result;try{result=compareState(rt,ref,provenance.ids,provenance.packedToOriginal,s=>fs.writeSync(fd,s));}finally{fs.closeSync(fd);}assert.equal(result.bodyStateSha256,expected[rt.step-1].bodyStateSha256,'PUBLISHED_STATE_HASH');assert.equal(result.spikes,expected[rt.step-1].spikes,'PUBLISHED_SPIKES');refV=ref.v;refS=ref.spikes;const record={step:rt.step,...result,elapsedMs:performance.now()-began};records.push(record);console.log(JSON.stringify(record));}
+-rt.audit();const checkpoint=saveLocalCheckpoint(rt,out+'/checkpoint');const report={schema:'droso-local-run-v1',status:partial?'PARTIAL':'PASS_TWO_LOCAL_STEPS',exportDigest:release.exportDigest,planDigest:loaded.digest,pid:process.pid,initialStep:previous?.completedSteps??0,completedSteps:rt.step,active:rt.active,steps:records,checkpoint,resumedFrom:resume??null,independentProcessPartialRestore:!!previous&&previous.active,operations:ops,runMs:performance.now()-start,totalMs:performance.now()-wall,peakRssBytes:process.resourceUsage().maxRSS*1024,networkRequests:0,publicTransactions:0,durability:process.permission?'ATOMIC_HASH_VALIDATED_SANDBOX_FSYNC_UNAVAILABLE':'FSYNC_ATOMIC',machine:{node:process.version,platform:process.platform,arch:process.arch,cpu:os.cpus()[0]?.model,cores:os.cpus().length,totalMemory:os.totalmem()}};atomic(out+'/report.json',{...report,reportDigest:digest(report)});console.log(JSON.stringify({status:report.status,report:out+'/report.json',runMs:report.runMs}));
++rt.audit();const checkpoint=saveLocalCheckpoint(rt,out+'/checkpoint');const report={schema:'droso-local-run-v1',status:partial?'PARTIAL':'PASS_TWO_LOCAL_STEPS',exportDigest:release.exportDigest,planDigest:loaded.digest,pid:process.pid,initialStep:previous?.completedSteps??0,completedSteps:rt.step,active:rt.active,steps:records,checkpoint,resumedFrom:resume??null,independentProcessPartialRestore:!!previous&&previous.active,operations:ops,runMs:performance.now()-start,totalMs:performance.now()-wall,peakRssBytes:process.resourceUsage().maxRSS*1024,sourceDigest:sourceIdentity().digest,networkIsolation:(globalThis as any).__drosoNetworkGuard??{mode:'NOT_INSTRUMENTED'},networkRequests:(globalThis as any).__drosoNetworkGuard?.attempts??null,publicTransactions:0,durability:process.permission?'ATOMIC_HASH_VALIDATED_SANDBOX_FSYNC_UNAVAILABLE':'FSYNC_ATOMIC',machine:{node:process.version,platform:process.platform,arch:process.arch,cpu:os.cpus()[0]?.model,cores:os.cpus().length,totalMemory:os.totalmem()}};atomic(out+'/report.json',{...report,reportDigest:digest(report)});console.log(JSON.stringify({status:report.status,report:out+'/report.json',runMs:report.runMs}));
+diff --git a/scripts/verify-chain.ts b/scripts/verify-chain.ts
+index 216328c..6af3912 100644
+--- a/scripts/verify-chain.ts
++++ b/scripts/verify-chain.ts
+@@ -1,17 +1,61 @@
+-import fs from 'node:fs';import assert from 'node:assert/strict';import {decodeFunctionResult} from 'viem';
+-import {snapshot} from '../src/initial.ts';import {httpRpc,anchor,historicalTag,identity,call,verifySlot,verifyPage,sampleIndices,Unavailable} from '../src/chain.ts';import {readJSON,atomic,digest} from '../src/integrity.ts';import {ba} from '../src/abi.ts';
++import fs from 'node:fs';
++import assert from 'node:assert/strict';
++import {decodeFunctionResult} from 'viem';
++import {snapshot} from '../src/initial.ts';
++import {httpRpc,anchor,historicalTag,identity,call,verifySlot,verifyPage,sampleIndices,Unavailable,RpcBudget} from '../src/chain.ts';
++import {readJSON,atomic,digest} from '../src/integrity.ts';
++import {ba,ca} from '../src/abi.ts';
++import {sourceIdentity} from '../src/source-identity.ts';
++import {integer,outputPath,acquireLock,checkedCheckpoint,TOTAL_SLOTS,TOTAL_PAGES} from '../src/chain-progress.ts';
+ const arg=(s:string)=>{const i=process.argv.indexOf(s);return i<0?undefined:process.argv[i+1];};
+-async function main(){const out=arg('--out')??'results/chain-'+Date.now()+'.json';assert.ok(/^results\/[a-zA-Z0-9_./-]+\.json$/.test(out)&&!out.includes('..'),'OUTPUT_PATH');const status=process.argv.includes('--status'),mode=arg('--mode')??'sample';assert.ok(['full','sample'].includes(mode));let url=process.env.BSC_TESTNET_RPC_URL;
++async function main(){
++ const out=outputPath(arg('--out')??'results/chain-'+Date.now()+'.json');assert.ok(out.endsWith('.json'));
++ assert.ok(!fs.existsSync(out),'FRESH_OUTPUT_REQUIRED');const unlock=acquireLock(out+'.lock');
++ try{await run(out);}finally{unlock();}
++}
++async function run(out:string){
++ const status=process.argv.includes('--status'),mode=arg('--mode')??'sample';assert.ok(['full','sample'].includes(mode));
++ const maxRpc=integer(Number(arg('--max-rpc')??30000),300000,'RPC_LIMIT',128),maxMs=integer(Number(arg('--max-ms')??600000),600000,'TIME_LIMIT',1000);
++ const concurrency=integer(Number(arg('--concurrency')??8),16,'CONCURRENCY',1);
++ const source=sourceIdentity(),started=Date.now();let url=process.env.BSC_TESTNET_RPC_URL;
+  if(!url&&fs.existsSync('.env')){const m=/^BSC_TESTNET_RPC_URL\s*=\s*["']?([^\r\n"']+)/m.exec(fs.readFileSync('.env','utf8'));url=m?.[1].trim();}
+- if(!url){const r={status:'NOT_RUN',reason:'RPC_NOT_CONFIGURED',mode:status?'current-status':mode};atomic(out,r);console.log(JSON.stringify(r));return;}
+- const {request:rpc,count}=httpRpc(url),started=Date.now();let progress:any={mode,slots:0,pages:0};
+- try{if(status){assert.equal(await rpc('eth_chainId'),'0x61','WRONG_CHAIN');const b=await rpc('eth_getBlockByNumber',['latest',false]),a=readJSON('deployments/bsc-testnet/deployment.json').addresses,values:any={};for(const fn of ['ready','presentCount','assemblyVersion','completedSteps','active','isSealed','custodyFault','implementationValid'])values[fn]=decodeFunctionResult({abi:ba,functionName:fn,data:await call(rpc,b.number,a.brain,ba,fn)});await anchor(rpc,b);const r={status:'CURRENT_STATE_OBSERVED',block:{number:b.number,hash:b.hash},at:new Date().toISOString(),values,rpc:count(),historicalSnapshotInvalidated:false};atomic(out,r);console.log(JSON.stringify(r,(_,x)=>typeof x==='bigint'?x.toString():x));return;}
+- const {release,snap}=await snapshot(),b=release.binding.block;await anchor(rpc,b);const tag=await historicalTag(rpc,b,release.binding.brain);const a=await identity(rpc,tag);for(const [key,expected]of Object.entries(snap.manifest.globals)){const [fn,index]=key.split('/');assert.equal(await call(rpc,tag,a.brain,ba,fn,index===undefined?[]:[BigInt(index)]),expected,'GLOBAL_'+key);}
+- const seed='droso-history-v1',slots=mode==='full'?Array.from({length:10419},(_,i)=>i):sampleIndices(10419,32,seed),pages=mode==='full'?Array.from({length:51567},(_,i)=>i):sampleIndices(51567,32,seed),binding=digest({export:release.exportDigest,block:b,mode,slots,pages});
+- const resume=arg('--resume');if(resume){assert.ok(resume.startsWith('results/')&&!resume.includes('..'));const prior=readJSON(resume),{localDigest,...body}=prior;assert.equal(digest(body),localDigest,'RESUME_CHANGED');assert.equal(prior.binding,binding);assert.equal(prior.block.hash,b.hash);progress={...prior};}
+- progress={...progress,binding,block:b,blockSelector:tag,sampling:mode==='sample'?{seed,slots,pages}:null,trust:'RPC plus publisher snapshot; no independent BSC consensus or state-proof validation. Resume trusts locally retained checkpoint; delete it for fresh audit.'};
+- const save=(state:string)=>{const {localDigest,...body}=progress;const r={...body,status:state,rpcThisInvocation:count(),elapsedMs:Date.now()-started};atomic(out+'.checkpoint.json',{...r,localDigest:digest(r)});atomic(out,{...r,localDigest:digest(r)});};
+- for(const [kind,indices,verify]of [['slots',slots,verifySlot],['pages',pages,verifyPage]] as const){for(let i=progress[kind];i<indices.length;i+=8){if(Date.now()-started>600000||fs.existsSync('results/STOP')){save('PARTIAL');console.log(JSON.stringify({status:'PARTIAL',resume:out+'.checkpoint.json',...progress}));return;}await anchor(rpc,b);const settled=await Promise.allSettled(indices.slice(i,i+8).map(index=>verify(rpc,tag,a,snap.get(kind,index))));for(const r of settled)if(r.status==='rejected')throw r.reason;await anchor(rpc,b);progress[kind]=Math.min(i+8,indices.length);save('PARTIAL');console.log(JSON.stringify({mode,slots:progress.slots,pages:progress.pages,rpc:count()}));}}
+- await anchor(rpc,b);save(mode==='full'?'PASS_FULL_HISTORICAL_RPC_COMPARE':'PASS_SAMPLE_HISTORICAL_RPC_COMPARE');console.log(JSON.stringify({status:mode==='full'?'PASS_FULL_HISTORICAL_RPC_COMPARE':'PASS_SAMPLE_HISTORICAL_RPC_COMPARE',report:out,rpc:count()}));
+- }catch(e){const r={...progress,status:e instanceof Unavailable?'UNAVAILABLE':'FAILED',reason:e instanceof Unavailable?'RPC cannot supply requested data; no latest fallback.':e instanceof Error?e.message.split('\n')[0]:'CHECK_FAILED',rpc:count(),elapsedMs:Date.now()-started};atomic(out,r);console.log(JSON.stringify(r));process.exitCode=e instanceof Unavailable?2:1;}}
++ if(!url){const r={status:'NOT_RUN',reason:'RPC_NOT_CONFIGURED',mode:status?'current-status':mode,sourceDigest:source.digest};atomic(out,r);console.log(JSON.stringify(r));return;}
++ const transport=httpRpc(url,maxRpc),rpc=transport.request;
++ let progress:any={mode,slots:0,pages:0,sourceDigest:source.digest},previousDigest:string|null=null;
++ const save=(state:string,reason?:string)=>{const {localDigest,...body}=progress;const r={...body,status:state,reason:reason??null,previousDigest,rpcThisInvocation:transport.count(),retries:transport.retries(),elapsedMs:Date.now()-started,at:new Date().toISOString(),limits:{maxRpc,maxMs,concurrency}};const signed={...r,localDigest:digest(r)};atomic(out+'.checkpoint.json',signed);atomic(out,signed);return signed;};
++ try{
++  if(status){
++   assert.equal(await rpc('eth_chainId'),'0x61','WRONG_CHAIN');const b=await rpc('eth_getBlockByNumber',['latest',false]);if(!b)throw new Unavailable();
++   const a=readJSON('deployments/bsc-testnet/deployment.json').addresses,values:any={};const tag=await historicalTag(rpc,b,a.brain);
++   for(const fn of ['ready','presentCount','assemblyVersion','completedSteps','active','isSealed','custodyFault','implementationValid'])values[fn]=decodeFunctionResult({abi:ba,functionName:fn,data:await call(rpc,tag,a.brain,ba,fn)});
++   values.assemblyNFTBalance=decodeFunctionResult({abi:ca,functionName:'balanceOf',data:await call(rpc,tag,a.cpu,ca,'balanceOf',[a.brain])});
++   await anchor(rpc,b);const r={status:'CURRENT_STATE_OBSERVED',block:{number:b.number,hash:b.hash,timestamp:b.timestamp},at:new Date().toISOString(),sourceDigest:source.digest,values,rpc:transport.count(),historicalSnapshotInvalidated:false};atomic(out,r);console.log(JSON.stringify(r,(_,x)=>typeof x==='bigint'?x.toString():x));return;
++  }
++  const {release,snap}=await snapshot(),b=release.binding.block;
++  const seed='droso-history-v1',slots=mode==='full'?Array.from({length:TOTAL_SLOTS},(_,i)=>i):sampleIndices(TOTAL_SLOTS,32,seed),pages=mode==='full'?Array.from({length:TOTAL_PAGES},(_,i)=>i):sampleIndices(TOTAL_PAGES,32,seed);
++  const binding=digest({export:release.exportDigest,block:b,mode,slots,pages,source:source.digest});
++  progress={...progress,binding,block:b,exportDigest:release.exportDigest,totalSlots:slots.length,totalPages:pages.length,sampling:mode==='sample'?{seed,slots,pages}:null,trust:'RPC plus publisher snapshot; no independent BSC consensus or state-proof validation. Resume trusts locally retained checkpoint.'};
++  const resume=arg('--resume');if(resume){outputPath(resume);const prior=checkedCheckpoint(resume,binding,source.digest);previousDigest=prior.localDigest;progress={...progress,slots:prior.slots,pages:prior.pages};}
++  // Recheck source and real historical dependencies on every invocation before accepting resumed progress.
++  await anchor(rpc,b);const tag=await historicalTag(rpc,b,release.binding.brain),a=await identity(rpc,tag);progress.blockSelector=tag;
++  for(const [key,expected]of Object.entries(snap.manifest.globals)){const [fn,index]=key.split('/');assert.equal(await call(rpc,tag,a.brain,ba,fn,index===undefined?[]:[BigInt(index)]),expected,'GLOBAL_'+key);}
++  save('PARTIAL','IDENTITY_VERIFIED');
++  for(const [kind,indices,verify]of [['slots',slots,verifySlot],['pages',pages,verifyPage]] as const){
++   for(let i=progress[kind];i<indices.length;i+=concurrency){
++    const width=Math.min(concurrency,indices.length-i),required=width*(kind==='slots'?11:2)+12;
++    if(fs.existsSync('results/STOP')||(arg('--stop-file')&&fs.existsSync(outputPath(arg('--stop-file')!)))){save('PARTIAL','USER_STOP');return;}
++    if(Date.now()-started>=maxMs||transport.count()+required>maxRpc){save('PARTIAL','SEGMENT_BUDGET');return;}
++    await anchor(rpc,b);const settled=await Promise.allSettled(indices.slice(i,i+width).map(index=>verify(rpc,tag,a,snap.get(kind,index))));
++    for(const r of settled)if(r.status==='rejected')throw r.reason;
++    await anchor(rpc,b);progress[kind]=i+width;save('PARTIAL','PROGRESS');
++    console.log(JSON.stringify({mode,slots:progress.slots,pages:progress.pages,rpc:transport.count(),elapsedMs:Date.now()-started}));
++   }
++  }
++  await anchor(rpc,b);save(mode==='full'?'PASS_FULL':'PASS_SAMPLE');console.log(JSON.stringify({status:mode==='full'?'PASS_FULL':'PASS_SAMPLE',report:out,rpc:transport.count()}));
++ }catch(e){
++  const state=e instanceof RpcBudget?'PARTIAL':e instanceof Unavailable?'UNAVAILABLE':'FAILED';
++  save(state,e instanceof RpcBudget?'SEGMENT_BUDGET':e instanceof Unavailable?e.reason:'IDENTITY_OR_DATA_CHECK_FAILED');
++  console.log(JSON.stringify({status:state,slots:progress.slots,pages:progress.pages,report:out}));process.exitCode=state==='PARTIAL'?0:state==='UNAVAILABLE'?2:1;
++ }
++}
+ main().catch(()=>{console.error('CHAIN_CHECK_FAILED');process.exitCode=1;});
+diff --git a/src/chain.ts b/src/chain.ts
+index b07734b..eebf223 100644
+--- a/src/chain.ts
++++ b/src/chain.ts
+@@ -2,8 +2,25 @@ import assert from 'node:assert/strict';
+ import {encodeFunctionData,decodeFunctionResult,parseAbi,keccak256} from 'viem';
+ import {ba,ca,da} from './abi.ts';import {readJSON,digest} from './integrity.ts';
+ export type Rpc=(m:string,p?:any[])=>Promise<any>;
+-export class Unavailable extends Error {rpcCode?:number;constructor(code?:number){super('HISTORICAL_RPC_UNAVAILABLE');this.rpcCode=code;}}
+-export function httpRpc(url:string,maxRequests=300000){const u=new URL(url);assert.ok(['http:','https:'].includes(u.protocol));let calls=0;const request:Rpc=async(method,params=[])=>{assert.ok(['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_getStorageAt','eth_call'].includes(method),'READ_ONLY_METHOD');if(++calls>maxRequests)throw Error('RPC_BUDGET');let response:any;try{const r=await fetch(url,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:calls,method,params}),signal:AbortSignal.timeout(20000)});if(!r.ok)throw new Unavailable();response=await r.json();}catch{throw new Unavailable();}if(response.error||!('result'in response))throw new Unavailable(response.error?.code);return response.result;};return {request,count:()=>calls};}
++export class Unavailable extends Error {rpcCode?:number;reason:string;constructor(code?:number,reason='HISTORICAL_RPC_UNAVAILABLE'){super(reason);this.rpcCode=code;this.reason=reason;}}
++export class RpcBudget extends Error {constructor(){super('RPC_BUDGET');}}
++export function httpRpc(url:string,maxRequests=300000){
++ const u=new URL(url);assert.ok(['http:','https:'].includes(u.protocol));let calls=0,retries=0;
++ const request:Rpc=async(method,params=[])=>{
++  assert.ok(['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_getStorageAt','eth_call'].includes(method),'READ_ONLY_METHOD');
++  for(let attempt=0;;attempt++){
++   if(calls>=maxRequests)throw new RpcBudget();calls++;
++   let response:any,status=0;
++   try{const r=await fetch(url,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:calls,method,params}),signal:AbortSignal.timeout(20000)});status=r.status;if(r.ok)response=await r.json();else if(status!==429)throw new Unavailable();}catch{throw new Unavailable();}
++   const limited=status===429||response?.error?.code===-32005;
++   if(limited&&attempt<2&&retries<8){retries++;await new Promise(r=>setTimeout(r,1000*2**attempt));continue;}
++   if(limited)throw new Unavailable(response?.error?.code,'RATE_LIMIT_RETRY_EXHAUSTED');
++   if(response?.error||!response||!('result' in response))throw new Unavailable(response?.error?.code);
++   return response.result;
++  }
++ };
++ return {request,count:()=>calls,retries:()=>retries};
++}
+ export async function anchor(rpc:Rpc,b:{number:string;hash:string}){assert.equal(await rpc('eth_chainId'),'0x61','WRONG_CHAIN');const h=await rpc('eth_getBlockByNumber',[b.number,false]);if(!h)throw new Unavailable();assert.equal(h.hash,b.hash,'WRONG_BLOCK_HASH');}
+ const extra=parseAbi(['function circuitBeacon() view returns(address)','function transistorBeacon() view returns(address)','function implementation() view returns(address)']);
+ export const call=(rpc:Rpc,tag:any,a:string,abi:any,fn:string,args:any[]=[])=>rpc('eth_call',[{to:a,data:encodeFunctionData({abi,functionName:fn,args}),gas:'0xfed260'},tag]);
+diff --git a/test/chain.test.ts b/test/chain.test.ts
+index a0b4927..7920a5c 100644
+--- a/test/chain.test.ts
++++ b/test/chain.test.ts
+@@ -6,3 +6,6 @@ test('slot queries use deployed ABI including one-argument occupiedToken and com
+ test('page tail length, pointer, codehash and exact bytes are all checked',async()=>{const pointer='0x'+'11'.repeat(20),code='0x000123',a={data:'0x'+'22'.repeat(20)},row={index:51,pointer,code},result=encodeFunctionResult({abi:da,functionName:'pages',result:[pointer,2,keccak256(code)]});await verifyPage(async(m)=>m==='eth_call'?result:code,'0x7db17ca',a,row);await assert.rejects(()=>verifyPage(async(m)=>m==='eth_call'?result:'0x00','0x7db17ca',a,row),/PAGE_BYTES/);});
+ import {historicalTag} from '../src/chain.ts';
+ test('prefer blockHash, use pinned number only on unsupported parameter, never latest',async()=>{const b={number:'0x7db17ca',hash:'0xab'};assert.deepEqual(await historicalTag(async()=> '0x1234',b,'0x11'),{blockHash:'0xab',requireCanonical:true});const calls:any[]=[];assert.equal(await historicalTag(async(m,p)=>{calls.push([m,p]);if(m==='eth_getCode')throw new Unavailable(-32602);return m==='eth_chainId'?'0x61':b;},b,'0x11'),b.number);assert.ok(!JSON.stringify(calls).includes('latest'));await assert.rejects(()=>historicalTag(async()=>{throw new Unavailable();},b,'0x11'),Unavailable);});
++import {RpcBudget} from '../src/chain.ts';
++test('RPC budget counts actual attempts and stops before another request',async()=>{const original=globalThis.fetch;let calls=0;globalThis.fetch=async()=>{calls++;return new Response(JSON.stringify({result:'0x61'}));};try{const r=httpRpc('https://example.invalid',1);assert.equal(await r.request('eth_chainId'),'0x61');await assert.rejects(()=>r.request('eth_chainId'),RpcBudget);assert.equal(calls,1);assert.equal(r.count(),1);}finally{globalThis.fetch=original;}});
++test('unknown historical RPC error stays UNAVAILABLE without retry or latest fallback',async()=>{const original=globalThis.fetch;let calls=0;globalThis.fetch=async()=>{calls++;return new Response(JSON.stringify({error:{code:-32000,message:'private endpoint details'}}));};try{await assert.rejects(()=>httpRpc('https://example.invalid').request('eth_getCode',[]),e=>e instanceof Unavailable&&!e.message.includes('private'));assert.equal(calls,1);}finally{globalThis.fetch=original;}});
+diff --git a/.github/workflows/reproduce.yml b/.github/workflows/reproduce.yml
+new file mode 100644
+index 0000000..2ea9df3
+--- /dev/null
++++ b/.github/workflows/reproduce.yml
+@@ -0,0 +1,43 @@
++name: Reproduce public model
++on:
++  push:
++  pull_request:
++  workflow_dispatch:
++permissions:
++  contents: read
++concurrency:
++  group: reproduce-${{ github.workflow }}-${{ github.ref }}
++  cancel-in-progress: true
++jobs:
++  linux-minimum-node:
++    runs-on: ubuntu-24.04
++    timeout-minutes: 45
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: '22.18.0'
++          cache: npm
++      - run: npm ci --no-audit --no-fund
++      - name: Record environment and source identity
++        run: |
++          mkdir -p results
++          node scripts/source-identity.ts > results/source-identity.json
++          node -e 'const os=require("node:os"); console.log(JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,cpu:os.cpus()[0].model,cores:os.cpus().length,memory:os.totalmem()}))' > results/environment.json
++          uname -a > results/kernel.txt
++      - name: Run all checks and full restore in isolated Linux network namespace
++        run: sudo unshare --net -- env PATH="$PATH" bash scripts/ci-offline.sh
++      - name: Upload reports only
++        if: always()
++        uses: actions/upload-artifact@v4
++        with:
++          name: linux-node-22.18-reports
++          if-no-files-found: warn
++          retention-days: 14
++          path: |
++            results/environment.json
++            results/kernel.txt
++            results/source-identity.json
++            results/linux-full/report.json
++            results/linux-partial/report.json
++            results/linux-resumed/report.json
+diff --git a/docs/HISTORICAL_VERIFY.md b/docs/HISTORICAL_VERIFY.md
+new file mode 100644
+index 0000000..3696f42
+--- /dev/null
++++ b/docs/HISTORICAL_VERIFY.md
+@@ -0,0 +1,35 @@
++# 历史链核对与自动续查
++
++离线复现不需要RPC或钱包。这里是独立的只读审计，默认锚定chain97、区块131798986及发行文件指定hash。不要向.env提供私钥，只有BSC_TESTNET_RPC_URL。
++
++```sh
++npm run verify:chain -- --mode sample --out results/sample-new.json
++npm run verify:chain:full-run -- --out results/full-history
++npm run status:chain
++```
++
++sample固定种子`droso-history-v1`，含两端的32槽/32页。full核对10419槽×11个实际字段、51567页×2个实际读取，另有每组前后链/区块及每段代码身份/全局状态检查；预计约25万RPC，不能用只验根替代。所有历史读取使用blockHash+requireCanonical，节点明确不支持时才固定blockNumber并复核hash，不会回退latest。
++
++## 有界自动续查
++
++默认每段10分钟、最多30000请求、最多8个对象同时核对（可显式设为不超过16）；每次网络请求20秒超时。整次最多6小时活动时间、300000请求。HTTP429或明确限流代码最多每请求2次退避（1秒/2秒），每段总重试不超过8次，计入RPC账本。其他历史不可用直接UNAVAILABLE，不自动循环。
++
++正常PARTIAL自动启动下一段。同一目录再次执行同一命令接续；每段重新核验执行源码指纹、候选/核对集合、区块及真实合约身份。未完成组不推进游标，已核验前缀不重新全部读取。目录`run.lock`拒绝第二个监督器；异常退出留下锁时，先确认记录的PID已退出并保留所有结果，再移除孤立锁。不得删除整个结果目录来伪装重新开始。
++
++```sh
++# 请求在当前核对组结束后停止
++ touch results/full-history/STOP
++# 人工确认继续后删除这一标记，再用原命令恢复
++ rm results/full-history/STOP
++ npm run verify:chain:full-run -- --out results/full-history
++```
++
++全局`results/STOP`也会停止。UNAVAILABLE在修复RPC后需要显式`--retry-unavailable`，只恢复一次，不获得新预算。FAILED需审查，工具拒绝自动接续。整次预算耗尽保持PARTIAL，不自动扩额。未决子进程中断后恢复，保守按该段预留请求数扣费，避免漏计尾部调用；报告区分实际报告计数与保守扣账。纯文件摘要不是独立的链共识/状态证明。
++
++`run.json`记录段列表、检查点digest链、源码指纹、覆盖、请求/重试/失败和活动耗时。段报告保存固定块、配置身份、游标与本次统计。完整结束状态只能在10419槽和51567页均完成时写`PASS_FULL`。当前状态另外固定一个新块读取；历史曾ready不能替代这项查询。
++
++配置和源码的执行指纹来自`npm run source:identity`，包括src/scripts/合约/ABI/编译输入/发行锚点/部署身份/锁文件，不包括文档与新测试报告。因此补充实测报告不改变被测执行代码身份。已经开始的运行不能热替换这些源码后冒充原指纹。
++
++## 本轮证据
++
++新工具的实际full结果与Linux状态见[验收说明](ACCEPTANCE.md)。旧32/32记录仍作为历史抽样保留，不自动升级为full。本轮无发送交易的方法、钱包依赖或账户操作。
+diff --git a/scripts/check-docs.ts b/scripts/check-docs.ts
+new file mode 100644
+index 0000000..2b34565
+--- /dev/null
++++ b/scripts/check-docs.ts
+@@ -0,0 +1,7 @@
++import fs from 'node:fs';import assert from 'node:assert/strict';import path from 'node:path';
++import {readJSON} from '../src/integrity.ts';
++const text=fs.readFileSync('README.md','utf8'),p=readJSON('package.json'),a=readJSON('deployments/bsc-testnet/deployment.json').addresses;
++for(const m of text.matchAll(/\]\(([^)]+)\)/g)){const link=m[1];if(!link.startsWith('https://')&&!link.startsWith('#'))assert.ok(fs.existsSync(path.resolve(link.split('#')[0])),'MISSING_LINK_'+link);}
++for(const m of text.matchAll(/npm run ([\w:-]+)/g))assert.ok(p.scripts[m[1]],'MISSING_SCRIPT_'+m[1]);
++for(const addr of Object.values(a))assert.ok(text.includes('https://testnet.bscscan.com/address/'+addr),'ADDRESS_MISMATCH');
++assert.ok(!text.includes('https://bscscan.com/'));console.log('PASS_README_LINKS_COMMANDS_ADDRESSES');
+diff --git a/scripts/ci-offline.sh b/scripts/ci-offline.sh
+new file mode 100644
+index 0000000..b85667c
+--- /dev/null
++++ b/scripts/ci-offline.sh
+@@ -0,0 +1,16 @@
++#!/usr/bin/env bash
++set -euo pipefail
++# Caller must isolate the network (CI uses Linux unshare --net) and install dependencies first.
++export NODE_OPTIONS="--require=$PWD/scripts/deny-network.cjs ${NODE_OPTIONS:-}"
++npm run files:verify
++npm test
++npm run typecheck
++npm run core:verify
++npm run build:contracts
++npm run snapshot:verify
++npm run data:verify
++npm run reproduce -- --steps 2 --out results/linux-full
++npm run result:verify -- results/linux-full/report.json
++npm run reproduce -- --save-partial-and-exit --out results/linux-partial
++npm run reproduce -- --resume results/linux-partial/report.json --out results/linux-resumed
++npm run result:verify -- results/linux-resumed/report.json
+diff --git a/scripts/files-update.ts b/scripts/files-update.ts
+new file mode 100644
+index 0000000..959c6d5
+--- /dev/null
++++ b/scripts/files-update.ts
+@@ -0,0 +1,2 @@
++import {writeInventory} from '../src/public-files.ts';
++console.log(JSON.stringify({status:'PUBLIC_INVENTORY_UPDATED',files:writeInventory().length}));
+diff --git a/scripts/source-identity.ts b/scripts/source-identity.ts
+new file mode 100644
+index 0000000..66e7b02
+--- /dev/null
++++ b/scripts/source-identity.ts
+@@ -0,0 +1,2 @@
++import {sourceIdentity} from '../src/source-identity.ts';
++console.log(JSON.stringify(sourceIdentity()));
+diff --git a/scripts/verify-chain-full-run.ts b/scripts/verify-chain-full-run.ts
+new file mode 100644
+index 0000000..32db271
+--- /dev/null
++++ b/scripts/verify-chain-full-run.ts
+@@ -0,0 +1,51 @@
++import fs from 'node:fs';
++import assert from 'node:assert/strict';
++import {spawn} from 'node:child_process';
++import {atomic,digest,readJSON} from '../src/integrity.ts';
++import {sourceIdentity} from '../src/source-identity.ts';
++import {integer,outputPath,acquireLock,checkedCheckpoint,checkedSegmentResult,TOTAL_SLOTS,TOTAL_PAGES} from '../src/chain-progress.ts';
++const arg=(s:string)=>{const i=process.argv.indexOf(s);return i<0?undefined:process.argv[i+1];};
++async function main(){
++ const dir=outputPath(arg('--out')??'results/full-history'),file=dir+'/run.json';const unlock=acquireLock(dir+'/run.lock');
++ const stop=()=>{fs.writeFileSync(dir+'/STOP','USER_STOP\n');};process.on('SIGINT',stop);process.on('SIGTERM',stop);
++ try{
++  const source=sourceIdentity(),release=readJSON('snapshots/initial/release.json');
++  const config={totalRpc:integer(Number(arg('--max-rpc')??300000),300000,'TOTAL_RPC',128),totalMs:integer(Number(arg('--max-ms')??21600000),21600000,'TOTAL_TIME',1000),segmentRpc:integer(Number(arg('--segment-rpc')??30000),30000,'SEGMENT_RPC',128),segmentMs:integer(Number(arg('--segment-ms')??600000),600000,'SEGMENT_TIME',1000),concurrency:integer(Number(arg('--concurrency')??8),16,'CONCURRENCY',1)};
++  const slots=Array.from({length:TOTAL_SLOTS},(_,i)=>i),pages=Array.from({length:TOTAL_PAGES},(_,i)=>i);
++  const binding=digest({export:release.exportDigest,block:release.binding.block,mode:'full',slots,pages,source:source.digest});
++  const identity=digest({binding,config});let state:any={schema:'droso-full-history-run-v1',status:'PARTIAL',mode:'full',identity,binding,sourceDigest:source.digest,exportDigest:release.exportDigest,block:release.binding.block,config,startedAt:new Date().toISOString(),slots:0,pages:0,rpcTotal:0,retries:0,failures:0,elapsedMs:0,segments:[],checkpoint:null,pending:null};
++  const save=()=>{const {localDigest,...body}=state;state={...body,updatedAt:new Date().toISOString()};atomic(file,{...state,localDigest:digest(state)});};
++  if(fs.existsSync(file)){const p=readJSON(file),{localDigest,...body}=p;assert.equal(digest(body),localDigest,'RUN_DIGEST');assert.equal(p.identity,identity,'RUN_IDENTITY');integer(p.rpcTotal,config.totalRpc,'TOTAL_RPC');assert.notEqual(p.status,'FAILED','FAILED_REQUIRES_REVIEW');state=body;}
++  const consume=(pending:any,recovered=false)=>{
++   let p:any;if(fs.existsSync(pending.out))p=readJSON(pending.out);else if(fs.existsSync(pending.out+'.checkpoint.json'))p=readJSON(pending.out+'.checkpoint.json');
++   if(!p||!p.binding){state.status=p?.status??'UNAVAILABLE';state.reason=p?.reason??'INTERRUPTED_BEFORE_CHECKPOINT';state.rpcTotal+=pending.reservedRpc;state.pending=null;state.failures++;save();return false;}
++   checkedSegmentResult(p,pending.start,binding,source.digest,pending.reservedRpc);
++   assert.equal(p.previousDigest,pending.previousDigest,'CHECKPOINT_CHAIN');
++   if(state.checkpoint){const prior=checkedCheckpoint(state.checkpoint,binding,source.digest);assert.equal(prior.localDigest,pending.previousDigest,'PREFIX_CHANGED');}
++   const charge=recovered?pending.reservedRpc:p.rpcThisInvocation;
++   state.rpcTotal+=charge;state.retries+=p.retries??0;state.elapsedMs+=recovered?Math.max(0,Date.now()-Date.parse(pending.startedAt)):p.elapsedMs;
++   state.slots=p.slots;state.pages=p.pages;state.status=p.status;state.reason=p.reason;state.checkpoint=pending.out+'.checkpoint.json';
++   state.segments.push({index:pending.index,report:pending.out,checkpointDigest:p.localDigest,previousDigest:p.previousDigest,status:p.status,slots:p.slots,pages:p.pages,rpcReported:p.rpcThisInvocation,rpcCharged:charge,recoveredConservativeCharge:recovered,elapsedMs:p.elapsedMs,retries:p.retries??0});state.pending=null;
++   if(!['PARTIAL','PASS_FULL'].includes(p.status))state.failures++;save();return ['PARTIAL','PASS_FULL'].includes(p.status);
++  };
++  if(state.pending&&!consume(state.pending,true))return;
++  if(state.status==='PASS_FULL'){assert.equal(state.slots,TOTAL_SLOTS);assert.equal(state.pages,TOTAL_PAGES);console.log(JSON.stringify({status:state.status,report:file,rpc:state.rpcTotal}));return;}
++  if(state.status==='UNAVAILABLE'){console.log(JSON.stringify({status:'UNAVAILABLE',reason:'Review RPC and use --retry-unavailable to retry once, without changing limits.'}));if(!process.argv.includes('--retry-unavailable'))return;state.status='PARTIAL';}
++  save();
++  while(state.status==='PARTIAL'){
++   assert.equal(sourceIdentity().digest,source.digest,'SOURCE_CHANGED');
++   if(fs.existsSync('results/STOP')||fs.existsSync(dir+'/STOP')){state.reason='USER_STOP';save();break;}
++   const remainingRpc=config.totalRpc-state.rpcTotal,remainingMs=config.totalMs-state.elapsedMs;
++   if(remainingRpc<128||remainingMs<1000){state.reason='TOTAL_BUDGET';save();break;}
++   const n=state.segments.length,out=dir+'/segment-'+String(n).padStart(3,'0')+'.json';assert.ok(!fs.existsSync(out),'SEGMENT_EXISTS');
++   const pending={index:n,out,reservedRpc:Math.min(config.segmentRpc,remainingRpc),reservedMs:Math.min(config.segmentMs,remainingMs),startedAt:new Date().toISOString(),start:{slots:state.slots,pages:state.pages},previousDigest:state.checkpoint?readJSON(state.checkpoint).localDigest:null};
++   state.pending=pending;save();const args=['scripts/verify-chain.ts','--mode','full','--out',out,'--max-rpc',String(pending.reservedRpc),'--max-ms',String(pending.reservedMs),'--concurrency',String(config.concurrency),'--stop-file',dir+'/STOP'];if(state.checkpoint)args.push('--resume',state.checkpoint);
++   const code=await new Promise<number|null>((resolve,reject)=>{const child=spawn(process.execPath,args,{stdio:'inherit',env:process.env});child.once('error',reject);child.once('exit',resolve);});
++   if(!consume(pending,code===null))break;
++   if(state.status==='PARTIAL'&&state.slots===pending.start.slots&&state.pages===pending.start.pages){state.reason=state.reason==='USER_STOP'?'USER_STOP':'NO_PROGRESS';save();break;}
++   console.log(JSON.stringify({event:'full-segment',status:state.status,slots:state.slots,pages:state.pages,rpc:state.rpcTotal,elapsedMs:state.elapsedMs}));
++  }
++  console.log(JSON.stringify({status:state.status,report:file,slots:state.slots,pages:state.pages,rpc:state.rpcTotal,reason:state.reason}));
++ }finally{process.off('SIGINT',stop);process.off('SIGTERM',stop);unlock();}
++}
++main().catch(()=>{console.error('FULL_RUN_STOPPED: lock, identity, budget, or checkpoint validation failed; preserve results and review.');process.exitCode=1;});
+diff --git a/src/chain-progress.ts b/src/chain-progress.ts
+new file mode 100644
+index 0000000..eb90ba4
+--- /dev/null
++++ b/src/chain-progress.ts
+@@ -0,0 +1,27 @@
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++import {digest,readJSON} from './integrity.ts';
++export const TOTAL_SLOTS=10419,TOTAL_PAGES=51567;
++export function integer(v:unknown,max:number,label:string,min=0):number {assert.ok(typeof v==='number'&&Number.isSafeInteger(v)&&v>=min&&v<=max,label);return v as number;}
++export function checkedCheckpoint(file:string,binding:string,source:string,previous?:any){
++ const p=readJSON(file),{localDigest,...body}=p;assert.equal(digest(body),localDigest,'RESUME_CHANGED');
++ assert.equal(p.binding,binding,'RESUME_BINDING');assert.equal(p.sourceDigest,source,'SOURCE_CHANGED');
++ integer(p.slots,TOTAL_SLOTS,'SLOT_CURSOR');integer(p.pages,TOTAL_PAGES,'PAGE_CURSOR');
++ if(p.pages>0)assert.equal(p.slots,p.totalSlots,'CURSOR_ORDER');
++ integer(p.totalSlots,TOTAL_SLOTS,'SLOT_TOTAL',1);integer(p.totalPages,TOTAL_PAGES,'PAGE_TOTAL',1);
++ assert.ok(p.slots<=p.totalSlots&&p.pages<=p.totalPages,'CURSOR_RANGE');
++ if(previous){assert.ok(p.slots>=previous.slots&&p.pages>=previous.pages,'CURSOR_ROLLBACK');}
++ assert.ok(['PARTIAL','UNAVAILABLE','FAILED','PASS_FULL','PASS_SAMPLE'].includes(p.status),'RESUME_STATUS');
++ assert.notEqual(p.status,'FAILED','FAILED_REQUIRES_REVIEW');return p;
++}
++export function outputPath(p:string){assert.ok(/^results\/[a-zA-Z0-9_./-]+$/.test(p)&&!p.split('/').includes('..'),'OUTPUT_PATH');return p;}
++/** Never steal an orphan lock automatically: PID reuse and partial reports need operator review. */
++export function acquireLock(file:string){fs.mkdirSync(path.dirname(file),{recursive:true});const fd=fs.openSync(file,'wx',0o600);fs.writeFileSync(fd,JSON.stringify({pid:process.pid,created:new Date().toISOString()}));fs.fsyncSync(fd);fs.closeSync(fd);return ()=>fs.unlinkSync(file);}
++export function checkedSegmentResult(p:any,start:any,binding:string,source:string,reserved:number){
++ const {localDigest,...body}=p;assert.equal(digest(body),localDigest,'SEGMENT_DIGEST');assert.equal(p.binding,binding);assert.equal(p.sourceDigest,source);
++ integer(p.rpcThisInvocation,reserved,'SEGMENT_RPC');integer(p.slots,TOTAL_SLOTS,'SLOT_CURSOR');integer(p.pages,TOTAL_PAGES,'PAGE_CURSOR');
++ assert.ok(p.slots>=start.slots&&p.pages>=start.pages,'CURSOR_ROLLBACK');
++ if(p.status==='PASS_FULL'){assert.equal(p.slots,TOTAL_SLOTS);assert.equal(p.pages,TOTAL_PAGES);}
++ return p;
++}
+diff --git a/src/public-files.ts b/src/public-files.ts
+new file mode 100644
+index 0000000..b0e1306
+--- /dev/null
++++ b/src/public-files.ts
+@@ -0,0 +1,8 @@
++import fs from 'node:fs';
++import path from 'node:path';
++import {fileHash,atomic} from './integrity.ts';
++export function publicFiles(){const files:string[]=[];
++ const walk=(dir:string)=>{for(const name of fs.readdirSync(dir).sort()){if(['.git','node_modules','.cache','results','release','.DS_Store'].includes(name)||(name.startsWith('.env')&&name!=='.env.example'))continue;const f=path.posix.join(dir,name),s=fs.lstatSync(f);if(s.isSymbolicLink())throw Error('RELEASE_SYMLINK');if(s.isDirectory())walk(f);else if(s.isFile()&&f!=='checksums/files.json')files.push(f);}};
++ walk('.');return files;
++}
++export function writeInventory(){const files=publicFiles();atomic('checksums/files.json',{schema:'droso-public-files-v1',files:files.map(file=>({file,bytes:fs.statSync(file).size,sha256:fileHash(file)}))});return files;}
+diff --git a/src/source-identity.ts b/src/source-identity.ts
+new file mode 100644
+index 0000000..5d58ccd
+--- /dev/null
++++ b/src/source-identity.ts
+@@ -0,0 +1,11 @@
++import fs from 'node:fs';
++import path from 'node:path';
++import {digest,fileHash} from './integrity.ts';
++/** Execution identity excludes reports/docs so publishing results does not change the tested program. */
++export function sourceIdentity(){
++ const roots=['src','scripts','contracts','abi','build','core','snapshots','deployments','package.json','package-lock.json','tsconfig.json'];
++ const files:string[]=[];
++ const walk=(p:string)=>{const s=fs.lstatSync(p);if(s.isSymbolicLink())throw Error('SOURCE_SYMLINK');if(s.isDirectory())for(const n of fs.readdirSync(p).sort())walk(path.posix.join(p,n));else files.push(p);};
++ roots.forEach(walk);files.sort();const entries=files.map(file=>({file,sha256:fileHash(file)}));
++ return {schema:'droso-execution-source-v1',digest:digest(entries),files:entries};
++}
+diff --git a/test/chain-progress.test.ts b/test/chain-progress.test.ts
+new file mode 100644
+index 0000000..e66d376
+--- /dev/null
++++ b/test/chain-progress.test.ts
+@@ -0,0 +1,8 @@
++import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
++import {checkedCheckpoint,checkedSegmentResult,acquireLock,integer} from '../src/chain-progress.ts';import {digest,atomic} from '../src/integrity.ts';
++const base=()=>({binding:'binding',sourceDigest:'source',status:'PARTIAL',totalSlots:10419,totalPages:51567,slots:8,pages:0,rpcThisInvocation:100});
++test('resume binds source and fixed set; rejects damaged, fractional, negative, out-of-range and reordered cursors',()=>{const d=fs.mkdtempSync(path.join(os.tmpdir(),'droso-progress-')),f=d+'/p.json';const put=(p:any)=>atomic(f,{...p,localDigest:digest(p)});try{put(base());assert.equal(checkedCheckpoint(f,'binding','source').slots,8);assert.throws(()=>checkedCheckpoint(f,'wrong','source'));assert.throws(()=>checkedCheckpoint(f,'binding','wrong'));
++for(const patch of [{slots:1.5},{slots:-1},{slots:10420},{pages:1},{pages:51568},{slots:NaN},{status:'FAILED'}]){put({...base(),...patch});assert.throws(()=>checkedCheckpoint(f,'binding','source'));}put(base());assert.throws(()=>checkedCheckpoint(f,'binding','source',{slots:16,pages:0}));const p=JSON.parse(fs.readFileSync(f,'utf8'));p.slots=16;fs.writeFileSync(f,JSON.stringify(p));assert.throws(()=>checkedCheckpoint(f,'binding','source'),/RESUME_CHANGED/);}finally{fs.rmSync(d,{recursive:true});}});
++test('segment cannot fake full, rollback, exceed RPC reservation or change source',()=>{const check=(p:any)=>checkedSegmentResult({...p,localDigest:digest(p)},{slots:8,pages:0},'binding','source',128);assert.equal(check(base()).slots,8);for(const patch of [{status:'PASS_FULL'},{slots:0},{rpcThisInvocation:129},{sourceDigest:'other'}])assert.throws(()=>check({...base(),...patch}));assert.equal(check({...base(),status:'PASS_FULL',slots:10419,pages:51567}).status,'PASS_FULL');});
++test('exclusive process lock cannot be stolen; release allows next invocation',()=>{const d=fs.mkdtempSync(path.join(os.tmpdir(),'droso-lock-'));try{const release=acquireLock(d+'/run.lock');assert.throws(()=>acquireLock(d+'/run.lock'));release();acquireLock(d+'/run.lock')();}finally{fs.rmSync(d,{recursive:true});}});
++test('bounded configuration rejects NaN, huge, fractional or zero concurrency',()=>{for(const n of [NaN,Infinity,17,0,1.5])assert.throws(()=>integer(n,16,'LIMIT',1));});

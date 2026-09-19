@@ -1,0 +1,12 @@
+{
+  "status": "PASS_KNOWN_CREDENTIAL_AND_PATH_SCAN",
+  "files": 173,
+  "immutableBaselinePayloads": "UNCHANGED",
+  "checks": [
+    "known local RPC/key values absent",
+    "personal absolute paths absent",
+    "private/runtime/node_modules excluded",
+    "historical core/snapshot/expected/contracts/deployment payloads unchanged"
+  ],
+  "publicTransactions": 0
+}

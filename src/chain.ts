@@ -2,8 +2,25 @@ import assert from 'node:assert/strict';
 import {encodeFunctionData,decodeFunctionResult,parseAbi,keccak256} from 'viem';
 import {ba,ca,da} from './abi.ts';import {readJSON,digest} from './integrity.ts';
 export type Rpc=(m:string,p?:any[])=>Promise<any>;
-export class Unavailable extends Error {rpcCode?:number;constructor(code?:number){super('HISTORICAL_RPC_UNAVAILABLE');this.rpcCode=code;}}
-export function httpRpc(url:string,maxRequests=300000){const u=new URL(url);assert.ok(['http:','https:'].includes(u.protocol));let calls=0;const request:Rpc=async(method,params=[])=>{assert.ok(['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_getStorageAt','eth_call'].includes(method),'READ_ONLY_METHOD');if(++calls>maxRequests)throw Error('RPC_BUDGET');let response:any;try{const r=await fetch(url,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:calls,method,params}),signal:AbortSignal.timeout(20000)});if(!r.ok)throw new Unavailable();response=await r.json();}catch{throw new Unavailable();}if(response.error||!('result'in response))throw new Unavailable(response.error?.code);return response.result;};return {request,count:()=>calls};}
+export class Unavailable extends Error {rpcCode?:number;reason:string;constructor(code?:number,reason='HISTORICAL_RPC_UNAVAILABLE'){super(reason);this.rpcCode=code;this.reason=reason;}}
+export class RpcBudget extends Error {constructor(){super('RPC_BUDGET');}}
+export function httpRpc(url:string,maxRequests=300000){
+ const u=new URL(url);assert.ok(['http:','https:'].includes(u.protocol));let calls=0,retries=0;
+ const request:Rpc=async(method,params=[])=>{
+  assert.ok(['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_getStorageAt','eth_call'].includes(method),'READ_ONLY_METHOD');
+  for(let attempt=0;;attempt++){
+   if(calls>=maxRequests)throw new RpcBudget();calls++;
+   let response:any,status=0;
+   try{const r=await fetch(url,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:calls,method,params}),signal:AbortSignal.timeout(20000)});status=r.status;if(r.ok)response=await r.json();else if(status!==429)throw new Unavailable();}catch{throw new Unavailable();}
+   const limited=status===429||response?.error?.code===-32005;
+   if(limited&&attempt<2&&retries<8){retries++;await new Promise(r=>setTimeout(r,1000*2**attempt));continue;}
+   if(limited)throw new Unavailable(response?.error?.code,'RATE_LIMIT_RETRY_EXHAUSTED');
+   if(response?.error||!response||!('result' in response))throw new Unavailable(response?.error?.code);
+   return response.result;
+  }
+ };
+ return {request,count:()=>calls,retries:()=>retries};
+}
 export async function anchor(rpc:Rpc,b:{number:string;hash:string}){assert.equal(await rpc('eth_chainId'),'0x61','WRONG_CHAIN');const h=await rpc('eth_getBlockByNumber',[b.number,false]);if(!h)throw new Unavailable();assert.equal(h.hash,b.hash,'WRONG_BLOCK_HASH');}
 const extra=parseAbi(['function circuitBeacon() view returns(address)','function transistorBeacon() view returns(address)','function implementation() view returns(address)']);
 export const call=(rpc:Rpc,tag:any,a:string,abi:any,fn:string,args:any[]=[])=>rpc('eth_call',[{to:a,data:encodeFunctionData({abi,functionName:fn,args}),gas:'0xfed260'},tag]);

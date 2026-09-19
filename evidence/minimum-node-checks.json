@@ -1,0 +1,28 @@
+{
+  "schema": "droso-public-final-checks-v1",
+  "status": "PASS_MINIMUM_NODE_MACOS",
+  "node": "v22.18.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "baseCommit": "ec698d364c5a8be42c3defd505f9eaef8ff7321c",
+  "sourceDigest": "1a3b69c338b2b14a4848e66c396ce731bdac5c30192e55b61c020a7664c91157",
+  "installation": "anonymous HTTPS clone, recorded patch, npm ci with independent cache and node_modules",
+  "tests": 18,
+  "checks": [
+    "files:verify",
+    "test",
+    "typecheck",
+    "core:verify",
+    "build:contracts",
+    "snapshot:verify",
+    "data:verify",
+    "reproduce two steps",
+    "result:verify",
+    "independent-process partial restore",
+    "docs:verify"
+  ],
+  "offline": "instrumented network guard; Node Permission Model denies parent-project reads; full/resumed report counters zero",
+  "linux": "BLOCKED_NO_AVAILABLE_LINUX_RUNTIME",
+  "remoteActions": "WORKFLOW_PREPARED_NOT_RUN",
+  "note": "Final execution source matches the full run. Subsequent evidence/docs/test changes do not affect this execution fingerprint."
+}

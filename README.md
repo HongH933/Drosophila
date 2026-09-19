@@ -1,19 +1,51 @@
-# droso
+# Drosophila / droso
 
-**这是社会实验和工程模型，不是真实果蝇行为、意识、糖响应或论文功能模型的复刻证明。**
+基于 **MaleCNS v1.0 的明确神经元内部连接图**，本项目构建了由实际 NAND/LATCH 网表执行的整数神经模型：**166,700 个神经元、25,582,938 条内部有向连接、10,419 枚独立 Circuit NFT**。数据和这些 NFT 已部署并托管在 BSC Testnet；公开包包含两个本地时间步之前的完整快照，可以重新计算并逐神经元核对结果。每枚 Circuit 为 **56 NAND + 3 LATCH、404 bytes**。
 
-我们把 MaleCNS v1.0 的一个明确神经元内部连接图映射为整数神经模型，用实际 **56 NAND + 3 LATCH** 网表执行。每个模块对应一枚独立 Circuit NFT；本版本有 **10,419 枚 NFT、166,700 个神经元、25,582,938 条连接**。数据及电路已部署并托管在 BSC Testnet。电脑是主要计算端。
+这是社会实验与工程模型；两步验收发生在本地，不宣称真实果蝇行为、糖响应、意识或论文功能等价。
 
-公开包独立包含复现载荷，不需要原研发仓库、钱包、私钥、tBNB 或 Anvil。依赖安装后，普通复现不访问网络。只读链核对需要你自己的 RPC，是单独的可选步骤。
+```mermaid
+flowchart LR
+    A[MaleCNS 数据] --> B[测试网数据页与 Circuit NFT]
+    B --> C[固定区块 step0 快照]
+    C --> D[本地实际 NAND/LATCH 网表计算]
+    D --> E[独立整数参考与固定结果比较]
+```
+
+## 测试网部署与证据
+
+网络：**BNB Smart Chain Testnet，chainId 97**。以下是本项目使用的部署，不代表上游官方背书。电脑是主要计算端；这些浏览器入口均指向测试网。
+
+| 用途 | 实际地址 / 测试网浏览器 |
+| --- | --- |
+| Factory：创建协议实例 | [0x076e383ff2e490A493f1f5c4359e922C46c54c01](https://testnet.bscscan.com/address/0x076e383ff2e490A493f1f5c4359e922C46c54c01) |
+| Circuits / Processor：独立电路 NFT | [0xa21f3a3ef5EBc12A687eCf168a9C1937E5FE4486](https://testnet.bscscan.com/address/0xa21f3a3ef5EBc12A687eCf168a9C1937E5FE4486) |
+| Transistors：NAND/LATCH 材料 | [0x7795fdaBdF41eF0cF549FD0a2aa8b76719E10b78](https://testnet.bscscan.com/address/0x7795fdaBdF41eF0cF549FD0a2aa8b76719E10b78) |
+| Assembly：配置、托管及集齐屏障 | [0xbe0d3af811fbdf9e5fcdc421b56fb001239efd51](https://testnet.bscscan.com/address/0xbe0d3af811fbdf9e5fcdc421b56fb001239efd51) |
+| StaticMicroData：不可变数据页目录 | [0x827F41F43be699ca7f2255b8bF19dFbE8122f1bD](https://testnet.bscscan.com/address/0x827F41F43be699ca7f2255b8bF19dFbE8122f1bD) |
+
+默认历史锚点是 **131798986**，hash `0x4b09598a04faf3f8f6cb635dc1d6776733b0c66713ba86ced57b870c23293c54`。该快照 `ready=true / completedSteps=0 / active=false`，表示两个本地时间步之前的状态，**不是实时状态声明**。
+
+- [验收说明](docs/ACCEPTANCE.md) · [部署信息](deployments/bsc-testnet/deployment.json)
+- 原签名证据：[托管与 ready](deployments/bsc-testnet/ready.json) · [链数据重建](deployments/bsc-testnet/rebuild-report.json) · [两步本地验收](deployments/bsc-testnet/local-acceptance-signed.json)
+- [测试前快照说明](docs/FORMAT_AND_BUILD.md) · [step0 锚点](snapshots/initial/release.json) · [31 个分片清单](bundles/export-manifest.json) · [全部发行文件校验清单](checksums/files.json)
+- [实际核心网表](core/core.bin) · [核心生成器](src/micro-core.ts) · [网表解释器](src/binary-gates.ts) · [全量门级运行器](src/packed-micro.ts)
+- [组装合约源码](contracts/BrainAssemblyMicroPages.sol) · [数据合约源码](contracts/StaticMicroData.sol) · [准确编译输入](build/compiler-input.json)
+- 完整预期结果：[step1](expected/step1.states.txt.gz) · [step2](expected/step2.states.txt.gz) · [固定摘要](expected/steps.json)
+- [历史链核对与自动续查](docs/HISTORICAL_VERIFY.md)
 
 ## 快速离线复现
 
 要求 Node.js >=22.18，建议64位系统、至少数GiB可用内存与约2GiB可用磁盘；这是工程建议，不是所有机器上的最低配置保证。
 
 ```sh
+git clone https://github.com/HongH933/Drosophila.git
+cd Drosophila
 npm ci
+npm run files:verify
 npm run snapshot:verify
 npm run reproduce -- --steps 2 --out results/my-first-run
+npm run result:verify -- results/my-first-run/report.json
 ```
 
 `results/my-first-run/report.json` 给出结果、耗时、内存、机器环境和检查点；`step1.states.txt` / `step2.states.txt` 给出每个bodyId的电位和脉冲。输出目录必须尚不存在。再次运行请选择新目录。
@@ -35,13 +67,15 @@ npm run reproduce -- --resume results/partial/report.json --out results/resumed
 cp .env.example .env
 # 在 .env 中填写自己的 BSC_TESTNET_RPC_URL；无需任何钱包字段。
 npm run verify:chain -- --mode sample --out results/history-sample.json
-npm run verify:chain -- --mode full --out results/history-full.json
+npm run verify:chain:full-run -- --out results/full-history
 npm run status:chain
 ```
 
-历史RPC必须提供区块 **131798986** 的状态。优先使用blockHash+requireCanonical；节点明确拒绝该参数时固定区块号，并在每组前后核对hash；历史状态不可用时报告UNAVAILABLE，绝不改读latest冒充通过。sample为公开固定种子选择32槽/32页；full覆盖全部10419槽/51567页。每次最多10分钟，PARTIAL原地恢复：
+历史RPC必须提供区块 **131798986** 的状态。优先使用blockHash+requireCanonical；节点明确拒绝该参数时固定区块号，并在每组前后核对hash；历史状态不可用时报告UNAVAILABLE，绝不改读latest冒充通过。sample为公开固定种子选择32槽/32页；full覆盖全部10419槽/51567页。自动 full 入口每段最多10分钟/30000请求，整次最多6小时/300000请求；同一个命令可接续已保存进度。发生 UNAVAILABLE 或 FAILED 不会无限重试。单段工具也可手动恢复：
 
 ```sh
+npm run verify:chain -- --mode full --out results/history-full.json
+# 若上条得到 PARTIAL，再续查：
 npm run verify:chain -- --mode full --resume results/history-full.json.checkpoint.json --out results/history-full-next.json
 ```
 

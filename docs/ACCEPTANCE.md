@@ -1,8 +1,20 @@
 # 本发行实测验收
 
+## 本轮公开入口收尾（2026-09-19）
+
+- 公开基线 `ec698d364c5a8be42c3defd505f9eaef8ff7321c` 已匿名HTTPS克隆，补丁与SHA256见 `evidence/public-final-provenance.json` 和 `public-final-tested.patch`。
+- README直接列出五个测试网地址、历史锚点、签名证据、核心与合约源码、完整预期结果和复现/核对命令；内部链接及命令已自动核对。
+- Linux：`BLOCKED_NO_AVAILABLE_LINUX_RUNTIME`。当前Mac无已安装Linux容器/VM，用户确认没有可用Linux设备；没有将Mac测试算作Linux成功。
+- GitHub Actions：`WORKFLOW_PREPARED_NOT_RUN`。Linux/Node22.18.0流程已准备，未擅自push或触发远程执行。
+- Node22.18.0独立Mac两步复现已通过：运行173.998秒，含加载总计199.270秒，峰值473874432 bytes（约452MiB）；源代码指纹 `1a3b69c338b2b14a4848e66c396ce731bdac5c30192e55b61c020a7664c91157`。预加载网络guard记录0次尝试，独立测试确认父工程读取和网络请求均被拒绝。
+- Node22.18.0非边界退出与独立进程恢复通过：继续运行176.908秒，峰值479084544 bytes；两个摘要与预期一致，结果重载通过。见 `evidence/minimum-node-full.json`、`minimum-node-partial.json`、`minimum-node-resumed.json`、`minimum-node-isolation.json`。
+- 新full历史核对正在按整次6小时/300000RPC上限自动续查；不把下方历史抽样升级为full。见文末新报告的实际覆盖与状态。
+
+## 首次独立打包验收（历史记录）
+
 这是同一台Mac上的**独立干净环境验收**，不是跨实体电脑测试。工程复制到独立目录，自己的package-lock执行`npm ci`，未引用父项目node_modules、钱包或.env。
 
-## 本轮结果
+## 首次打包结果
 
 | 项目 | 实际结果 |
 | --- | --- |
@@ -39,3 +51,13 @@ Node严格Permission Model不支持fsync，干净测试明确记录该限制；�
 ## 未完成且不冒充完成
 
 新工具完整在线RPC重读、另一台实体电脑测试、TapeOut完整匹配源码、独立安全审计、正式生理参数批准、公共CNS神经时间步均没有在本轮完成。完整本地复现和历史链数据可核对已经可交付；不以这些未完成事项阻止公开工程整理，也不将它们标成PASS。
+
+<!-- FULL_READER_STATUS_START -->
+## 新公开工具 full 历史核对状态
+
+状态 **PARTIAL**；执行器 RUNNING_BOUNDED_SUPERVISOR。记录时间 2026-09-19T05:56:19.950Z。
+
+实际覆盖 **2496/10419 槽、0/51567 页**；累计请求扣账 28176，活动耗时 1062.4 秒，完成分段 1。重试 0，失败 0。未结束段计入当前已保存的请求数；崩溃恢复可能保守扣预留量，详情见分段报告。
+
+[新full报告](../evidence/full-history-current/summary.json) · [监督器检查点链](../evidence/full-history-current/run.json)。当前状态查询单列为 NOT_RUN，不替代历史结果。Linux仍为BLOCKED_NO_AVAILABLE_LINUX_RUNTIME，远程CI仍为WORKFLOW_PREPARED_NOT_RUN。
+<!-- FULL_READER_STATUS_END -->

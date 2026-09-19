@@ -1,0 +1,11 @@
+{
+  "schema": "droso-public-final-source-test-v1",
+  "baseCommit": "ec698d364c5a8be42c3defd505f9eaef8ff7321c",
+  "publicAnonymousClone": "https://github.com/HongH933/Drosophila.git",
+  "patchSha256": "3ba884f480ef3260d73207bc4d23792b8b8b2413d72e003fa9ac935a97726a18",
+  "patchBytes": 90270,
+  "sourceDigest": "1a3b69c338b2b14a4848e66c396ce731bdac5c30192e55b61c020a7664c91157",
+  "linuxStatus": "BLOCKED_NO_AVAILABLE_LINUX_RUNTIME",
+  "remoteActionsStatus": "WORKFLOW_PREPARED_NOT_RUN",
+  "scope": "Mac minimum-node checks and separate readonly full RPC are measured individually; no Linux success claim"
+}
