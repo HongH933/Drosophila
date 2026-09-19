@@ -1,0 +1,1541 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "cpu",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint32",
+            "name": "slots",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "neurons",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "externalInputs",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "frames",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "chunks",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint8",
+            "name": "maxCycles",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "slotRoot",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "dataRoot",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "frameRoot",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct BrainAssemblyMicroPagesStorage.Config",
+        "name": "c",
+        "type": "tuple"
+      },
+      {
+        "internalType": "contract StaticMicroData",
+        "name": "data",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "ACCUMULATOR_BOUND",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AFTER_COMPLETION",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "BATCH_LIMIT",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CHUNK",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "COLLECTION",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CONFIG",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CURSOR",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CUSTODY",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CUSTODY_OR_CIRCUIT",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DEPOSITOR",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EDGE_BINDING",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EDGE_BUDGET",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EDGE_COMPLETE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EDGE_COVERAGE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EDGE_LENGTH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EDGE_ORDER",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FACTORY",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FRAME_ORDER",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FROZEN",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "IMPLEMENTATION",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INCOMPLETE_CONFIG",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INCOMPLETE_OR_STALE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INDEX",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID_CIRCUIT",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MICROCYCLE_LIMIT",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NOT_READY",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "OCCUPIED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PARTITION_OR_THRESHOLD",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PROOF",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PROOF_LENGTH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "REENTRANCY",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RESULT_LENGTH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RESULT_PADDING",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ROOT",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SLOT_CORE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SLOT_SIZE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "STALE_OR_MISSING",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UNEXPECTED_NFT",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "WORK_OUTPUT",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "step",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "checkpoint",
+        "type": "bytes32"
+      }
+    ],
+    "name": "Committed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "token",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "depositor",
+        "type": "address"
+      }
+    ],
+    "name": "Deposited",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "cycle",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "neuron",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "cursor",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "bitIndex",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "phase",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "bits",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "inputs",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "outputs",
+        "type": "bytes"
+      }
+    ],
+    "name": "MicroOperation",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "token",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "depositor",
+        "type": "address"
+      }
+    ],
+    "name": "Withdrawn",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "IMPLEMENTATION_VERSION",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "active",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint64",
+        "name": "version",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "round",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "neuron",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "cursor",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "bitIndex",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "phase",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint32",
+        "name": "cyclesDone",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "count",
+        "type": "uint8"
+      }
+    ],
+    "name": "advance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "assemblyVersion",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "assignedCount",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "slots",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "auditCustody",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beacon",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint64",
+        "name": "version",
+        "type": "uint64"
+      }
+    ],
+    "name": "begin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "builder",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "checkpointHash",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "chunkCount",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collection",
+    "outputs": [
+      {
+        "internalType": "contract ICircuits",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collectionHash",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint64",
+        "name": "version",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "round",
+        "type": "uint64"
+      }
+    ],
+    "name": "commit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "committedBank",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      }
+    ],
+    "name": "committedState",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "completeDataSlots",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "completedModules",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "completedSteps",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "config",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "slots",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "neurons",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "externalInputs",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "frames",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "chunks",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "maxCycles",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "slotRoot",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "dataRoot",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "frameRoot",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "bits",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "proof",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "configureFrame",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "width",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint32",
+            "name": "gateCount",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "netlistBytes",
+            "type": "uint32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "netlistHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "edgeRoot",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint32[]",
+            "name": "neurons",
+            "type": "uint32[]"
+          },
+          {
+            "internalType": "uint32[]",
+            "name": "edgeCounts",
+            "type": "uint32[]"
+          },
+          {
+            "internalType": "uint16[]",
+            "name": "thresholds",
+            "type": "uint16[]"
+          },
+          {
+            "internalType": "bytes",
+            "name": "initialState",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct BrainAssemblyMicroPagesStorage.SlotSpec",
+        "name": "s",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "proof",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "configureSlot",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "configuredCount",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "configuredRecords",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      }
+    ],
+    "name": "currentWork",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "round",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint32",
+            "name": "neuron",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "cursor",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "cycles",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "bits",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint8",
+            "name": "bitIndex",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "phase",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct BrainAssemblyMicroPagesStorage.Work",
+        "name": "w",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "custodyFault",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "dataChunk",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "cpu",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token",
+        "type": "uint256"
+      }
+    ],
+    "name": "deposit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "edgeChunk",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "factory",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      }
+    ],
+    "name": "holding",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "depositor",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct BrainAssemblyMicroPagesStorage.Holding",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implementation",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implementationHash",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implementationValid",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "inputFrame",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isSealed",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "loadedBlocks",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "loadedEdges",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "loadedFrames",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "microcheckpointHash",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "occupiedToken",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "onERC721Received",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      }
+    ],
+    "name": "pendingState",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "presentCount",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ready",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "roundNonce",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "seal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "slotEdgeBase",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      }
+    ],
+    "name": "slotSpec",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "width",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint32",
+            "name": "gateCount",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "netlistBytes",
+            "type": "uint32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "netlistHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "edgeRoot",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint32[]",
+            "name": "neurons",
+            "type": "uint32[]"
+          },
+          {
+            "internalType": "uint32[]",
+            "name": "edgeCounts",
+            "type": "uint32[]"
+          },
+          {
+            "internalType": "uint16[]",
+            "name": "thresholds",
+            "type": "uint16[]"
+          },
+          {
+            "internalType": "bytes",
+            "name": "initialState",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct BrainAssemblyMicroPagesStorage.SlotSpec",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stateRoot",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "staticData",
+    "outputs": [
+      {
+        "internalType": "contract StaticMicroData",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "totalEdges",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treeBase",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token",
+        "type": "uint256"
+      }
+    ],
+    "name": "valid",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "proof",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "validateChunk",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "proof",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "validateEdges",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "slot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "workRoot",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

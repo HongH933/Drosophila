@@ -1,0 +1,30 @@
+{
+  "schema": "droso-mainnet-sync-validation-v1",
+  "recordedAt": "2026-09-19T07:16:49.049101+00:00",
+  "checks": {
+    "unitTests": {
+      "passed": 30,
+      "mainnetTests": 12,
+      "scope": "Existing 18 tests plus 12 mainnet/network/readonly/error-handling tests; mocked RPC tests are not live-chain evidence."
+    },
+    "typecheck": "PASS",
+    "docsLinksAndNetworkAddresses": "PASS",
+    "exactMainnetRecompile": "PASS; recompile.json",
+    "preservation": "66 original files byte-identical, including 31 shards; preservation.json",
+    "publicInventory": "PASS",
+    "privacyScan": "No personal absolute paths, private key assignments, RPC credential URLs or wallet files found in the public inventory."
+  },
+  "liveReadOnlyEvidence": "../../deployments/bsc-mainnet/current-observation.json",
+  "sourceHashes": {
+    "src/mainnet-status.ts": "11fa4e0995e774440527aed71c2c1fa33e2a758df62bc36ad9d91be68c55930d",
+    "scripts/status-mainnet.ts": "3c943f3bf3e0b78cfdadb47e89b07bbbb2aab3ad54bb193de7511e95a8a38ef1",
+    "scripts/build-mainnet.ts": "4563e68251e74d5b7e008319c06cefb93dfdfc4e69c4cdf87029d6e8083b251e",
+    "test/mainnet-status.test.ts": "cfab234da494c17aa503341a258e9ff83ed0fdaf8a9f46f30c98adc9e3ef56ab",
+    "scripts/check-docs.ts": "b6e24701de4382116098cc3001b6f2bb6973e2627feec260a42fff10e8d6affc"
+  },
+  "mainnetTransactionsSent": 0,
+  "testnetTransactionsSent": 0,
+  "independentAudit": false,
+  "mainnetFullAssemblyAccepted": false,
+  "commitPushTagRelease": "NOT_PERFORMED"
+}

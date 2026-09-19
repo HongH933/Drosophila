@@ -1,0 +1,89 @@
+{
+  "schema": "droso-mainnet-source-provenance-v1",
+  "sourceRepository": "https://github.com/HongH933/tapeout-fly",
+  "sourceCommit": "118213c66bc36c085cd9bda7ad2afc59054bc8b3",
+  "derivedPublicSummary": true,
+  "originalSignature": false,
+  "files": [
+    {
+      "file": "docs/MAINNET_CONTRACT_DEPLOYMENT.md",
+      "sha256": "90f8b0424b6ab23eea4d0a3c16422073d5999d510caa86023fae6bdb3f606aea"
+    },
+    {
+      "file": "deployments/bsc-mainnet/mainnet-contracts-001/deployment.json",
+      "sha256": "4fe5262bfb4bac1a05f17d71d3dbe79465e66f6571f622a0df88d1d732bd275c"
+    },
+    {
+      "file": "deployments/bsc-mainnet/mainnet-contracts-001/status.json",
+      "sha256": "be50b387698831c41a3c2cf6df3cb5cce130d82a77abd8d939745e263f401118"
+    },
+    {
+      "file": "deployments/bsc-mainnet/mainnet-contracts-001/plan.json",
+      "sha256": "76d445fa3ba6b8c82af60b3dc1aad73eea89c8bf24c6d61659156f237efd6710"
+    },
+    {
+      "file": "contracts/BrainAssembly.sol",
+      "sha256": "9f3c1035c5669a031a136fd81ff9f91ebcd3e0b462a6807d57f6b12e6e1b06c1"
+    },
+    {
+      "file": "contracts/StaticMicroData.sol",
+      "sha256": "ede0b0d22a5d16b09e3a75127bdc7a4819cecb52a00e3998e32327c15828c01d"
+    },
+    {
+      "file": "contracts/BrainAssemblyMicroPagesStorage.sol",
+      "sha256": "4c3ff6476f6ff10e91d40826e9b0ca6f09b74363b21be0620cb6bbc428578c27"
+    },
+    {
+      "file": "contracts/BrainAssemblyMicroPagesInitializer.sol",
+      "sha256": "d32f59c61341515fc2fe250e096ab6c26d23bdd6985e1c3525cc7a1a7a0166bf"
+    },
+    {
+      "file": "contracts/BrainAssemblyMicroPagesUpgradeable.sol",
+      "sha256": "a165b2eff435150b686e0bce43451e568f95e124c76f5958e233fddd74ce3808"
+    },
+    {
+      "file": "contracts/ProjectUpgradeableBeacon.sol",
+      "sha256": "e230c309278a12c8362a30b382a7c7b2575bf314af8dec4f4e6a56b93903d28b"
+    },
+    {
+      "file": "contracts/ProjectBeaconProxy.sol",
+      "sha256": "ff92c8130970b4911bd033046c091bae23d6b9403ef0b2a5fcbdf7c0a125752d"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/BrainAssembly.json",
+      "sha256": "d02dec90dfd714b247f2e16d9a4e30c10bb867eb9c5d4cc533f7279873930d9b"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/BrainAssemblyMicroPagesInitializer.json",
+      "sha256": "37f4f4168e65bac45533c1f6e87fdd875295f38c8744b1b1204bd5325f24c236"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/BrainAssemblyMicroPagesUpgradeable.json",
+      "sha256": "40b5f97d87125aa2dec0aa8c8f186802bf03f6ab4497b1211c3ba6c6b7b8ab07"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/MicroDataPage.json",
+      "sha256": "e3325a02ad0a752e62e88cc650cdc0d7e69e7a0cae429b539decdf795f7028e1"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/ProjectBeaconProxy.json",
+      "sha256": "439e2a2fbf6e22d78b4e472d598c0849aae77900608ad4065e29c963bbf40152"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/ProjectUpgradeableBeacon.json",
+      "sha256": "4cfe60ce44f0f8ddd2f1a7db36f35661b3fd5288a1f87c351dd19bf04fe5799b"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/StaticMicroData.json",
+      "sha256": "b46fa4fa5c6f97c269f3d4c4db9c052375e0509bc9cfe0372efc81aa5b93c04f"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/compiler-input.json",
+      "sha256": "8b8f087c4451d070c6b723a4eabfd4919254d030bf90e0848d1f338b69de15cd"
+    },
+    {
+      "file": "artifacts/mainnet/contract-suite-v1/build/manifest.json",
+      "sha256": "80a48f29d4c475608f52adc576a338e7174b8503b8f0ca8464c82491fad4469c"
+    }
+  ]
+}

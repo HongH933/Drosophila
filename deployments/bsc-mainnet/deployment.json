@@ -1,0 +1,42 @@
+{
+  "schema": "droso-mainnet-deployment-summary-v1",
+  "derivedPublicSummary": true,
+  "originalSignature": false,
+  "source": "source-hashes.json",
+  "chainId": 56,
+  "status": "CONTRACTS_ONLY_DEPLOYED",
+  "historicalAnchor": {
+    "number": "0x75103d1",
+    "hash": "0x23f66bec9eb0f6069e74b569fc331a5bc161cfafb5a8475e0453015abc904cd0"
+  },
+  "addressesFile": "addresses.json",
+  "receiptsFile": "receipts-index.json",
+  "candidate": {
+    "candidateDigest": "42f3879a499f90de56b728614812141a6412d1b424d3a2d9b4ba20234647ac2a",
+    "engineeringProfile": "malecns-m3-balanced-unresolved-stress-v1",
+    "parameterApproval": false,
+    "buildDigest": "79b6f61519ba695fe2d8fbb36405510df1ead70d893ba837aabf2c156c7690e3"
+  },
+  "modelVersion": "lif-int16-v1",
+  "implementationVersionLabel": "lif-int16-bitserial-assembly-codepages-beacon-v1",
+  "targetNfts": 10419,
+  "existingProcessorCreatedByTheseTransactions": false,
+  "cost": {
+    "wei": "408909400000000",
+    "BNB": "0.0004089094",
+    "scope": "Only the five project contract creations; excludes existing Processor, future data, manufacture, custody and computation."
+  },
+  "upgradeAuthority": "PROJECT_BEACON_OWNER_HAS_COMPLETE_PROXY_IMPLEMENTATION_CONTROL",
+  "independentAudit": false,
+  "candidateModelBinding": {
+    "datasetId": "male-cns:v1.0",
+    "datasetLockSha256": "539191aa65f6e6bb9235e2b1f1ba830002c4ca6bff735a7f32feb6b9c6edcf46",
+    "groupingVersion": "contiguous-v1:c75b50bb976f13f5373a077c7c2c84db159dfab41459c2b43daa35754f99f1ae",
+    "implementationVersion": "lif-int16-bitserial-assembly-codepages-v1",
+    "modelVersion": "lif-int16-v1",
+    "profileSha256": "69b44dcdd7b335ccb7dce8d24caccf106009004ca46087b5200d99d072057556",
+    "scopeSha256": "5357302617358da0056b4c95cced2d435ba8d907415f48d45a830518e19bf2c4",
+    "scopeVersion": "malecns-superclass-assigned-v2"
+  },
+  "candidateModelBindingNote": "Same candidate identity, not the same network or deployed implementation. The mainnet implementation version is separately recorded."
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "beacon_",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "initializer_",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "initialization",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "reason",
+        "type": "bytes"
+      }
+    ],
+    "name": "INITIALIZATION_FAILED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID_BEACON",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID_IMPLEMENTATION",
+    "type": "error"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
+]

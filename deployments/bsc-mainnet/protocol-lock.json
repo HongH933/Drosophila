@@ -1,0 +1,24 @@
+{
+  "schema": "droso-mainnet-dependency-lock-v1",
+  "chainId": 56,
+  "source": "source-hashes.json",
+  "anchor": {
+    "number": "0x75103d1",
+    "hash": "0x23f66bec9eb0f6069e74b569fc331a5bc161cfafb5a8475e0453015abc904cd0"
+  },
+  "expectedCodeHashes": {
+    "staticData": "0x6518399af1e530d9077c01090dca9778ac0c8e44f72c4ece358569423016b43c",
+    "initializer": "0x5d6cbf78724de6d0efb9ef84d0e02fe4f41f15161f63f5a3277be781a002a4c1",
+    "assemblyImplementation": "0xaa1055e7887bc26b2233d8fe4c42b2977df7f7035cba11309efd8a0136524361",
+    "projectBeacon": "0x16c29af5c487ceaa7048f54035d437f2db725824c9875a19644f542cd7a7f25b",
+    "assemblyProxy": "0x4fc515154c7e5f14b6e9ff24b317dfdfa60dcdc2e37ad868bdeca1cf3b6eb9b4",
+    "processor": "0xd8c4b0216e0aadd615fbd134465b6af060a11769edc7c844d8f14d1b8a783992",
+    "protocolFactory": "0xed6b710a769987f50494d713f278817992e3266e45898a990be878efc2fcbbce",
+    "protocolCircuitBeacon": "0x964014cd563c5bc62e1f8a3b2995969d6385f25da1e4efa353a01a62e0b75cca",
+    "protocolCircuitImplementation": "0x2ea433839e23b3773b7880d6f1807affb0f648ae98760b9a3b6394879665c345"
+  },
+  "proxyBeaconSlot": "0xa3f0ad74e5423aebfd80d3ef4346578335a9a72aeaee59ff6cb3582b35133d50",
+  "expectedProjectPendingOwner": "0x0000000000000000000000000000000000000000",
+  "protocolSourceReview": "BLOCKED_SOURCE: ABI and bytecode identity are not matching-source permission review.",
+  "independentAudit": false
+}

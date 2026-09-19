@@ -1,0 +1,36 @@
+{
+  "schema": "droso-mainnet-addresses-v1",
+  "chainId": 56,
+  "network": "BNB Smart Chain Mainnet",
+  "source": "source-hashes.json",
+  "addresses": {
+    "staticData": "0x9EC103817da8642339315F21e721aB289B47fC2f",
+    "initializer": "0x7b3b7992586E452B7f2c8b42901A472710B86635",
+    "assemblyImplementation": "0x5dc8d01DA5517fCe1C9e127DBa32ae7118B17B0c",
+    "projectBeacon": "0xeecF62291a624Edbe6e3324F9b73A2afa91C3581",
+    "assemblyProxy": "0xFc970a468649261324DD11A38Cc532b717bDf1eE",
+    "processor": "0xD72Cfc1D2F8B659ce1Ae441Ae18c3c0f9A3710C5",
+    "protocolFactory": "0x68224F668083c29e9800Be2a646d42d18cedF7e2",
+    "protocolCircuitBeacon": "0xf8D6d8EB894d6971c8976Ad8b4971cbEFE028156",
+    "protocolCircuitImplementation": "0x8E1D125Def6d3826C278299273a0760D47626068",
+    "deployer": "0xd5E2af7fFde4E16b98284C12e0b6d5E09cC515fE",
+    "projectBeaconOwner": "0xd5E2af7fFde4E16b98284C12e0b6d5E09cC515fE",
+    "transistors": "0x8CF6C8c2472136c85e4b89fd6996C2cc54BCA23e"
+  },
+  "aliases": {
+    "assembly": "assemblyProxy",
+    "brain": "assemblyProxy",
+    "proxy": "assemblyProxy",
+    "circuits": "processor"
+  },
+  "transistorsEvidence": {
+    "file": "current-observation.json",
+    "method": "Processor.transistors()",
+    "block": {
+      "number": "0x7511829",
+      "hash": "0xbf82c86d78cc9f728be6026b9d16a2e9969f27a39078f6811de04a7abc81e27e"
+    },
+    "codeHash": "0xeadb02c1bca8b1501036e5f32064ed69c6b4feb57dea05c4a56aad62ee492393",
+    "discoveredAfterDeploymentSummary": true
+  }
+}

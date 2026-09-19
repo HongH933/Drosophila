@@ -55,9 +55,9 @@ Node严格Permission Model不支持fsync，干净测试明确记录该限制；�
 <!-- FULL_READER_STATUS_START -->
 ## 新公开工具 full 历史核对状态
 
-状态 **PARTIAL**；执行器 RUNNING_BOUNDED_SUPERVISOR。记录时间 2026-09-19T05:56:19.950Z。
+状态 **PARTIAL**；执行器 STOPPED。记录时间 2026-09-19T07:05:01.154Z。
 
-实际覆盖 **2496/10419 槽、0/51567 页**；累计请求扣账 28176，活动耗时 1062.4 秒，完成分段 1。重试 0，失败 0。未结束段计入当前已保存的请求数；崩溃恢复可能保守扣预留量，详情见分段报告。
+实际覆盖 **10419/10419 槽、3488/51567 页**；累计请求扣账 125497，活动耗时 5176.2 秒，完成分段 9。重试 0，失败 0。未结束段计入当前已保存的请求数；崩溃恢复可能保守扣预留量，详情见分段报告。
 
 [新full报告](../evidence/full-history-current/summary.json) · [监督器检查点链](../evidence/full-history-current/run.json)。当前状态查询单列为 NOT_RUN，不替代历史结果。Linux仍为BLOCKED_NO_AVAILABLE_LINUX_RUNTIME，远程CI仍为WORKFLOW_PREPARED_NOT_RUN。
 <!-- FULL_READER_STATUS_END -->

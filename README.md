@@ -12,7 +12,41 @@ flowchart LR
     D --> E[独立整数参考与固定结果比较]
 ```
 
-## 测试网部署与证据
+## 网络与部署
+
+### BSC Mainnet，chainId 56
+
+**CONTRACTS_ONLY_DEPLOYED：五个项目合约已部署，指定 Processor 已绑定；数据上传、模块配置、全量制造和组装尚未完成。** 10,419 是候选制造任务目标，不是主网完成数量。
+
+| 角色 | 主网地址 / BscScan |
+| --- | --- |
+| Assembly Proxy：对外组装入口 | [0xFc970a468649261324DD11A38Cc532b717bDf1eE](https://bscscan.com/address/0xFc970a468649261324DD11A38Cc532b717bDf1eE) |
+| 既有 Processor / Circuits | [0xD72Cfc1D2F8B659ce1Ae441Ae18c3c0f9A3710C5](https://bscscan.com/address/0xD72Cfc1D2F8B659ce1Ae441Ae18c3c0f9A3710C5) |
+| 该 Processor 实际绑定的 Factory | [0x68224F668083c29e9800Be2a646d42d18cedF7e2](https://bscscan.com/address/0x68224F668083c29e9800Be2a646d42d18cedF7e2) |
+| StaticMicroData：数据页目录 | [0x9EC103817da8642339315F21e721aB289B47fC2f](https://bscscan.com/address/0x9EC103817da8642339315F21e721aB289B47fC2f) |
+| 项目 Beacon：组装器升级指针 | [0xeecF62291a624Edbe6e3324F9b73A2afa91C3581](https://bscscan.com/address/0xeecF62291a624Edbe6e3324F9b73A2afa91C3581) |
+| 组装逻辑 implementation | [0x5dc8d01DA5517fCe1C9e127DBa32ae7118B17B0c](https://bscscan.com/address/0x5dc8d01DA5517fCe1C9e127DBa32ae7118B17B0c) |
+| Proxy 一次性存储初始化器 | [0x7b3b7992586E452B7f2c8b42901A472710B86635](https://bscscan.com/address/0x7b3b7992586E452B7f2c8b42901A472710B86635) |
+
+本次只读观察区块 **122755113**：已注册页 0/51,567、已配置模块 0/10,419、已托管 NFT 0/10,419，`sealed=false / ready=false / completedSteps=0 / active=false`。这是带区块的观察，不是永久实时值。部署报告记录目标任务制造完成数为 0，不能据此推断 Processor 整个合集历史总供应为 0。
+
+五笔创建实际支出 **0.0004089094 BNB**，不含既有 Processor 创建、未来数据、NFT、托管或运行费用。主网 BNB 与测试网 tBNB 分开记录。
+
+[主网详细架构、协议依赖与升级权限](docs/MAINNET_DEPLOYMENT.md) · [唯一角色地址清单](deployments/bsc-mainnet/addresses.json) · [五笔实际创建回执](deployments/bsc-mainnet/receipts-index.json) · [固定区块只读观察](deployments/bsc-mainnet/current-observation.json)。
+
+**这些地址用于查看合约和进度，不是直接转入 BNB 或 NFT 的指引。** 项目 Beacon owner 能升级组装逻辑，包括托管规则；不能把它理解为已锁定、多签或已经过独立审计。
+
+仅需自己的 `BSC_MAINNET_RPC_URL`（`.env.example` 中为空）：
+
+```sh
+npm run status:mainnet
+# 可选：同时复核五笔部署回执及其 canonical 区块
+npm run status:mainnet -- --verify-deployment
+```
+
+无 RPC 为 NOT_RUN，访问失败为 UNAVAILABLE；不回退到测试网。报告写入 `results/mainnet-status.json`，不会覆盖历史部署记录。查询成功也不代表主网全脑验收。
+
+### BSC Testnet，chainId 97
 
 网络：**BNB Smart Chain Testnet，chainId 97**。以下是本项目使用的部署，不代表上游官方背书。电脑是主要计算端；这些浏览器入口均指向测试网。
 
@@ -114,6 +148,7 @@ npm run typecheck
 npm run core:verify
 npm run data:verify
 npm run build:contracts
+npm run build:mainnet
 npm run release:pack
 ```
 

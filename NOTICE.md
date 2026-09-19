@@ -21,3 +21,7 @@ Berkeley ABC：[berkeley-abc/abc](https://github.com/berkeley-abc/abc)，历史�
 c3s-reflex-circuits@1938edfdc85d7ca812ee9e4359247860606f7830的小组件、综合和等价验证流程曾作为方法参考；没有引入其行为模型、逃逸策略或实现代码，不能将其测试结果称为droso结果。
 
 Node.js、TypeScript、viem及其依赖、Solidity工具保留各自版权和许可证。精确依赖锁在package-lock.json，随附许可证及版本清单在 `licenses/`。solc为重建开发依赖，原编译器版本保持锁定；这些工具和自动测试不构成独立安全审计。
+
+## 主网项目合约来源
+
+`contracts/mainnet/`、`build/mainnet/` 来自 tapeout-fly 提交 `118213c66bc36c085cd9bda7ad2afc59054bc8b3`，保留原 Solidity SPDX 标识。具体原文件 SHA256 见 `deployments/bsc-mainnet/source-hashes.json`。协议 ABI 是接口记录，不表示匹配协议实现源码已取得。公开运行无需访问原仓库。

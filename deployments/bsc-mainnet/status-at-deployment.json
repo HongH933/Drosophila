@@ -1,0 +1,25 @@
+{
+  "schema": "droso-mainnet-historical-status-v1",
+  "derivedPublicSummary": true,
+  "chainId": 56,
+  "status": "CONTRACTS_ONLY_DEPLOYED",
+  "stateAnchor": {
+    "number": "0x75103d1",
+    "hash": "0x23f66bec9eb0f6069e74b569fc331a5bc161cfafb5a8475e0453015abc904cd0"
+  },
+  "subsequentCodeVerificationAnchor": {
+    "number": "0x75105a3",
+    "hash": "0x9b53207570547135848540c50a8133b9dc2fd0d5a808fb37f3057c0078750fd7"
+  },
+  "source": "source-hashes.json",
+  "configurationUploaded": false,
+  "sealed": false,
+  "manufacturedNfts": 0,
+  "custodiedNfts": 0,
+  "ready": false,
+  "completedSteps": 0,
+  "active": false,
+  "manufacturedNftsMeaning": "Target manufacture completions recorded by this deployment report; NOT the historical supply of the entire Processor collection.",
+  "targetNfts": 10419,
+  "liveState": "Use status:mainnet; these are historical values, never substituted for a fresh read."
+}

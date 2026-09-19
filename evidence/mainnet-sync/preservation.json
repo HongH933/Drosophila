@@ -1,0 +1,272 @@
+{
+  "schema": "droso-mainnet-preservation-v1",
+  "status": "PASS_BYTES_UNCHANGED",
+  "targetBaseCommit": "119a9fef2c766f49e22199431e588c30877a45a0",
+  "originalFiles": [
+    {
+      "file": "abi/CircuitFactory.json",
+      "sha256": "00429f2b439fb2b813286d4faaff35426d2413db79cf64c57ce57b762eda7faf"
+    },
+    {
+      "file": "abi/Circuits.json",
+      "sha256": "cffbfd891180e406bdf6e8343788a9af0c43ae6671f815113ecbd288bb4cde2e"
+    },
+    {
+      "file": "abi/Transistors.json",
+      "sha256": "9112cf3763b9540e4075d7b669d75db568e6e1d22686349fc45db58f674c329c"
+    },
+    {
+      "file": "build/BrainAssemblyMicroPages.json",
+      "sha256": "abf8e8f0fc778e576084d52e7a13e3feda673c6368153a2a1a666f1e32de0fba"
+    },
+    {
+      "file": "build/MicroDataPage.json",
+      "sha256": "07763b03a98cc8f47b203d4e18931b02320e04e79988969b578b86aebd1b471b"
+    },
+    {
+      "file": "build/StaticMicroData.json",
+      "sha256": "bda7f21455e04b9b9c351e935c4c118a87f8ee353e48de1cfa0021fac199e05e"
+    },
+    {
+      "file": "build/build-info.json",
+      "sha256": "2e73f0059866a9e44ad20ae41113ca44d26b318105a3c1a7c01d9220c167cf32"
+    },
+    {
+      "file": "build/compiler-input.json",
+      "sha256": "d96e49a07a2af9a9cd53640b133ef391747e5d2976aaf40ca382fd84ad682a27"
+    },
+    {
+      "file": "bundles/export-manifest.json",
+      "sha256": "d0cba834a4a7a154cdb95bfd97c4136a1281c94c9cd469299d926780d87dc50e"
+    },
+    {
+      "file": "bundles/snapshot-000.bin.gz",
+      "sha256": "856f0c3e166c8a23e5737482f743c724526224ff237a5e5516685a6e496ab17a"
+    },
+    {
+      "file": "bundles/snapshot-001.bin.gz",
+      "sha256": "2cf48fbde8f9918996c7fab8768f85f45c4eff86e9f240babb3737156712cde8"
+    },
+    {
+      "file": "bundles/snapshot-002.bin.gz",
+      "sha256": "625b7eb0bfd2d501179506468e5ec532294c5a6ace40bffe01c7b9f55925db43"
+    },
+    {
+      "file": "bundles/snapshot-003.bin.gz",
+      "sha256": "e8e67d541a14a28fa69d858f83aa6f194d611f690c9e9c932d7e6708f03441ae"
+    },
+    {
+      "file": "bundles/snapshot-004.bin.gz",
+      "sha256": "653d8cb9cee0870d055eeb682fdcc60b148f37d57c6f8396fc83ceb5ac1aa165"
+    },
+    {
+      "file": "bundles/snapshot-005.bin.gz",
+      "sha256": "553e332468b90af06fd99bbe69c49fda32aa2144e3d730d5a875a8d5c6262110"
+    },
+    {
+      "file": "bundles/snapshot-006.bin.gz",
+      "sha256": "3e8597ce4e3d0b7b184be6712be7002fc6cc44e822c4785d4153f116a03560e9"
+    },
+    {
+      "file": "bundles/snapshot-007.bin.gz",
+      "sha256": "c7a69c24a86403f1c0aa5c0d708431289b3d5dc1d8eb728090942743f0d84e9e"
+    },
+    {
+      "file": "bundles/snapshot-008.bin.gz",
+      "sha256": "bf560efd1ecb67ebdadc264045724926726864bb364b787b904901be31ca7fae"
+    },
+    {
+      "file": "bundles/snapshot-009.bin.gz",
+      "sha256": "d00e43434c5d4637e52c811670be431ad09bc03694a1e81e020092f6673c3b7f"
+    },
+    {
+      "file": "bundles/snapshot-010.bin.gz",
+      "sha256": "a3a92bbd49a33b823656f1fd770aac972613fdb8b7ab7023f612706c8590630a"
+    },
+    {
+      "file": "bundles/snapshot-011.bin.gz",
+      "sha256": "819b660ae900cbc3b5765bc4531ace020115fde89e89481246c940dc228367be"
+    },
+    {
+      "file": "bundles/snapshot-012.bin.gz",
+      "sha256": "18ae1fb019ee7beb63c9211c66cac939e6233902bdcfca5a22b584a27d6ab355"
+    },
+    {
+      "file": "bundles/snapshot-013.bin.gz",
+      "sha256": "34eddd31097c465f1f64a2630251bca0094c8aff9858cd1d3bc805ff0588a453"
+    },
+    {
+      "file": "bundles/snapshot-014.bin.gz",
+      "sha256": "2b46d66e13ab7e9858ade0c73c864f448f42f94600b963834853165d30aa871f"
+    },
+    {
+      "file": "bundles/snapshot-015.bin.gz",
+      "sha256": "0535ad8af7651a409c0b5f0181360e3aa7a1e11dc0b60a0c7e03c83c0f2aa96e"
+    },
+    {
+      "file": "bundles/snapshot-016.bin.gz",
+      "sha256": "727183e5b0b55ff3715de7ac414e9e3833d5039d5a37cf9b9493815104e513f3"
+    },
+    {
+      "file": "bundles/snapshot-017.bin.gz",
+      "sha256": "c0d683f504c2eefd7a15d7b91f833f4ae1144f9677ef62bbaefdd9e9d768b8ad"
+    },
+    {
+      "file": "bundles/snapshot-018.bin.gz",
+      "sha256": "298fb6d2f364f766048cace0257b797f84452f48728ec1470440b3933c6d618e"
+    },
+    {
+      "file": "bundles/snapshot-019.bin.gz",
+      "sha256": "ae1483c63b9f830930e153482e5fb09d70193737998ede82f7ca13b399039032"
+    },
+    {
+      "file": "bundles/snapshot-020.bin.gz",
+      "sha256": "99acd009cffbf6aa16294b7c5eea99bbbf2ba0c0b0bf5ea5c1b833a4949f0b62"
+    },
+    {
+      "file": "bundles/snapshot-021.bin.gz",
+      "sha256": "bb1129636ae19d5aa707bf912832553ddb268a805a3c7e7071052c06e8fa6507"
+    },
+    {
+      "file": "bundles/snapshot-022.bin.gz",
+      "sha256": "ae500ca1a24defe16ea42b3b5a351f3fc0efb0ef1689f222fc262f70b52688bd"
+    },
+    {
+      "file": "bundles/snapshot-023.bin.gz",
+      "sha256": "a0f1b94123e633eb383ac448914942ac021c2a2b4bc577cbf79a3e7351a2b671"
+    },
+    {
+      "file": "bundles/snapshot-024.bin.gz",
+      "sha256": "61576fcdf110186e9d9db1d181428ca70cb855900bb870c7a5b47d5e487fc23a"
+    },
+    {
+      "file": "bundles/snapshot-025.bin.gz",
+      "sha256": "af000cddc1c50265ce57ce148877d9b09f1b6e6e83ff8612ca9a49eeebf7c421"
+    },
+    {
+      "file": "bundles/snapshot-026.bin.gz",
+      "sha256": "05ab9063706c6ec896de52f082e3dfccfaa1d8b212d8b8a3ea502b5b0dbcb4a0"
+    },
+    {
+      "file": "bundles/snapshot-027.bin.gz",
+      "sha256": "f329f4f05af22002e68fb5531cce334788e0406938c0eb8f263447ba5841b702"
+    },
+    {
+      "file": "bundles/snapshot-028.bin.gz",
+      "sha256": "ba9fe0fa5d9de864202253b250501965445dce2e72ce6b996fb251e0f6c8f3fa"
+    },
+    {
+      "file": "bundles/snapshot-029.bin.gz",
+      "sha256": "f722763e7b558ef17769afb39fe39d53a4b6eaae314442c88ea68b4905fddfd0"
+    },
+    {
+      "file": "bundles/snapshot-030.bin.gz",
+      "sha256": "fe0f12aaa4c6b67fafd72d3d44a9d56739c74c40a74ee83c00c212f3c6c18eaf"
+    },
+    {
+      "file": "contracts/BrainAssembly.sol",
+      "sha256": "9f3c1035c5669a031a136fd81ff9f91ebcd3e0b462a6807d57f6b12e6e1b06c1"
+    },
+    {
+      "file": "contracts/BrainAssemblyMicroPages.sol",
+      "sha256": "1e869624acfb85ea2b4fd6753eafea89f8dab1493e6759e72e8538456677d116"
+    },
+    {
+      "file": "contracts/StaticMicroData.sol",
+      "sha256": "ede0b0d22a5d16b09e3a75127bdc7a4819cecb52a00e3998e32327c15828c01d"
+    },
+    {
+      "file": "core/ABC-LICENSE",
+      "sha256": "819151b8f059a48f806c75732ef62b1f873b49b6a04fb128aed28bf87d3dcd6c"
+    },
+    {
+      "file": "core/core.bin",
+      "sha256": "94a289de04d23291fdacb38effdc95ba28b025b69e978505fab8c8565013f6fb"
+    },
+    {
+      "file": "core/selected.blif",
+      "sha256": "fedd05ce71024ca6035bec6c1949f58aa4909328f11ec396bd905c51ce6673f2"
+    },
+    {
+      "file": "deployments/bsc-testnet/custody-fingerprint.json",
+      "sha256": "2aee985b060f0fc49db11866e0cac1299b1076e2ee8b44f8aa993a0b62478044"
+    },
+    {
+      "file": "deployments/bsc-testnet/deployment.json",
+      "sha256": "33ecc8ead1beca06ddf439f5462e69fdd5b7d295cb47f61b53fd08e31cc33249"
+    },
+    {
+      "file": "deployments/bsc-testnet/local-acceptance-signed.json",
+      "sha256": "95efd03a61baa3918f1bb0f8ecca43007dfe3be9bb450a6d77844dbc9c2df877"
+    },
+    {
+      "file": "deployments/bsc-testnet/page-config.json",
+      "sha256": "6ffe1e75bcd8f645def3cb85dbcb3d229d4ce95be9dd27eac7b8a8155d4cd38b"
+    },
+    {
+      "file": "deployments/bsc-testnet/protocol-lock.json",
+      "sha256": "de89dbc31aa7384b074bbcf46872fa83d92bee1019928f0201b78e958a28bd2f"
+    },
+    {
+      "file": "deployments/bsc-testnet/ready.json",
+      "sha256": "8a15371bfd7dc1321e729b126a319aff59044af6b6d1fd467729362458bcb958"
+    },
+    {
+      "file": "deployments/bsc-testnet/rebuild-report.json",
+      "sha256": "8832c9e2230115195cccbc30cd69fddfc67093dbf034901aed740e9279718347"
+    },
+    {
+      "file": "expected/states-manifest.json",
+      "sha256": "0154bf8ccad54a5c82dc9cbfc1e6cd9511a6e06e69e1709ce123e3ae3fd1ac89"
+    },
+    {
+      "file": "expected/step1.states.txt.gz",
+      "sha256": "24a3c6f9cd311fe4c939835ad28e9679cc9f8f31436ceacfb9dacbaebad1ec1c"
+    },
+    {
+      "file": "expected/step2.states.txt.gz",
+      "sha256": "245c6210c9ef0ac0077ceb40cffb504a56610819b1e223fafe6761fc0b660db0"
+    },
+    {
+      "file": "expected/steps.json",
+      "sha256": "31dd0629ead86b56d9f8979c3b39cce55dca7083c9474f81835488add37bd0d9"
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "82263c77db32da5155e4ae13f91a7053f44c96dca9fdb58f5b74c43de584f05c"
+    },
+    {
+      "file": "scripts/reproduce.ts",
+      "sha256": "74ebe6380df6af45f876a3981736f1146fdf5bf61c868bde19c2b6e11e27b5b4"
+    },
+    {
+      "file": "scripts/verify-chain.ts",
+      "sha256": "af82e976b3edc9238a62d593bd319d71c8c8d3b5bc9b704ed009656a3964382b"
+    },
+    {
+      "file": "snapshots/initial/release.json",
+      "sha256": "6c44fdfea6f56c3561b8edd9fe79ad8b5f87099a41611185dbdcd97615d3117e"
+    },
+    {
+      "file": "src/binary-gates.ts",
+      "sha256": "87530e2efa70cfe1143d99418bc1011892a7dbcc65287b1174fc659945859f09"
+    },
+    {
+      "file": "src/chain.ts",
+      "sha256": "2ad7ee8db17d72818de35748ff7a5ad2c4d30c7eb992cc50d0b4d8e28d0035d5"
+    },
+    {
+      "file": "src/model.ts",
+      "sha256": "8a2c937e77dcd2dd7ac0c9ed462f7e5fea82a62f6b251d5af06d7f2995be34ba"
+    },
+    {
+      "file": "src/packed-micro.ts",
+      "sha256": "0d5af0484e53a76aef05f555fa28f78d70f9413d19ecfc7b2a7f764b9e7afc64"
+    },
+    {
+      "file": "src/packed-runtime.ts",
+      "sha256": "030cbbfe710b398b9aadc7dc474261d696bc1b36567dcc58ff832b8537214fd6"
+    }
+  ],
+  "note": "Comparison against the pre-sync committed public inventory; no model steps rerun."
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "mainnet-contract-build-v1",
+  "compiler": "0.8.24+commit.e11b9ed9.Emscripten.clang",
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "viaIR": true,
+    "evmVersion": "shanghai",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "storageLayout",
+          "evm.bytecode.object",
+          "evm.deployedBytecode.object",
+          "evm.deployedBytecode.immutableReferences"
+        ]
+      }
+    }
+  },
+  "sourceSha256": {
+    "BrainAssembly.sol": "9f3c1035c5669a031a136fd81ff9f91ebcd3e0b462a6807d57f6b12e6e1b06c1",
+    "StaticMicroData.sol": "ede0b0d22a5d16b09e3a75127bdc7a4819cecb52a00e3998e32327c15828c01d",
+    "BrainAssemblyMicroPagesStorage.sol": "4c3ff6476f6ff10e91d40826e9b0ca6f09b74363b21be0620cb6bbc428578c27",
+    "BrainAssemblyMicroPagesInitializer.sol": "d32f59c61341515fc2fe250e096ab6c26d23bdd6985e1c3525cc7a1a7a0166bf",
+    "BrainAssemblyMicroPagesUpgradeable.sol": "a165b2eff435150b686e0bce43451e568f95e124c76f5958e233fddd74ce3808",
+    "ProjectUpgradeableBeacon.sol": "e230c309278a12c8362a30b382a7c7b2575bf314af8dec4f4e6a56b93903d28b",
+    "ProjectBeaconProxy.sol": "ff92c8130970b4911bd033046c091bae23d6b9403ef0b2a5fcbdf7c0a125752d"
+  },
+  "inputCanonicalSha256": "94f6753c940a4742c0014abf306ef1df48e5dfbd4dee97d72f209dc7f270d737",
+  "inventory": [
+    {
+      "name": "BrainAssembly",
+      "runtimeBytes": 14758,
+      "creationBytes": 18574,
+      "runtimeSha256": "7929d2c12dedfeece73fa572450cdb758595a719abcaca4edfed5584a7b22a34"
+    },
+    {
+      "name": "BrainAssemblyMicroPagesInitializer",
+      "runtimeBytes": 3037,
+      "creationBytes": 3866,
+      "runtimeSha256": "73d6831b357363b3a066cfd2d66c1b0c7ecbda6a125a8815c9c8172d1c67198b"
+    },
+    {
+      "name": "BrainAssemblyMicroPagesUpgradeable",
+      "runtimeBytes": 24512,
+      "creationBytes": 26650,
+      "runtimeSha256": "278ecba0d98f61446c19b5c3f645cf2b21cfbd26db388106a1f206e3b94275e5"
+    },
+    {
+      "name": "ProjectBeaconProxy",
+      "runtimeBytes": 603,
+      "creationBytes": 1282,
+      "runtimeSha256": "d0febfdb95db3711aa63a3bb51b35d61b496c956ad369874d3f902c9393a0fe0"
+    },
+    {
+      "name": "ProjectUpgradeableBeacon",
+      "runtimeBytes": 668,
+      "creationBytes": 979,
+      "runtimeSha256": "e732d7a796e598d40641f6949038904ca079232e65e1ea074514889c55e05d48"
+    },
+    {
+      "name": "MicroDataPage",
+      "runtimeBytes": 57,
+      "creationBytes": 329,
+      "runtimeSha256": "c26400fdabce1173997d267c7ab329576ffe146227b2307553ed68f761187c14"
+    },
+    {
+      "name": "StaticMicroData",
+      "runtimeBytes": 5833,
+      "creationBytes": 6735,
+      "runtimeSha256": "b4a836e2794b92c8eec49bf99dc64b9d61d26a518f5e9685a227179979c17bdb"
+    }
+  ],
+  "storageLayoutCompatibleWith": "BrainAssemblyMicroPages",
+  "originalRuntimeBytes": 24512,
+  "implementationRuntimeBytes": 24512,
+  "eip170Limit": 24576,
+  "independentAudit": false
+}

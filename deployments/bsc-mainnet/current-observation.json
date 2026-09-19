@@ -1,0 +1,176 @@
+{
+  "schema": "droso-mainnet-observation-v1",
+  "status": "OBSERVED",
+  "observedAt": "2026-09-19T07:11:54.743Z",
+  "chainId": 56,
+  "block": {
+    "number": "0x7511829",
+    "hash": "0xbf82c86d78cc9f728be6026b9d16a2e9969f27a39078f6811de04a7abc81e27e"
+  },
+  "rpcCount": 60,
+  "publicTransactions": 0,
+  "changes": [],
+  "code": {
+    "assemblyProxy": {
+      "address": "0xFc970a468649261324DD11A38Cc532b717bDf1eE",
+      "hash": "0x4fc515154c7e5f14b6e9ff24b317dfdfa60dcdc2e37ad868bdeca1cf3b6eb9b4",
+      "bytes": 603
+    },
+    "projectBeacon": {
+      "address": "0xeecf62291a624edbe6e3324f9b73a2afa91c3581",
+      "hash": "0x16c29af5c487ceaa7048f54035d437f2db725824c9875a19644f542cd7a7f25b",
+      "bytes": 668
+    },
+    "assemblyImplementation": {
+      "address": "0x5dc8d01DA5517fCe1C9e127DBa32ae7118B17B0c",
+      "hash": "0xaa1055e7887bc26b2233d8fe4c42b2977df7f7035cba11309efd8a0136524361",
+      "bytes": 24512
+    },
+    "initializer": {
+      "address": "0x7b3b7992586E452B7f2c8b42901A472710B86635",
+      "hash": "0x5d6cbf78724de6d0efb9ef84d0e02fe4f41f15161f63f5a3277be781a002a4c1",
+      "bytes": 3037
+    },
+    "processor": {
+      "address": "0xD72Cfc1D2F8B659ce1Ae441Ae18c3c0f9A3710C5",
+      "hash": "0xd8c4b0216e0aadd615fbd134465b6af060a11769edc7c844d8f14d1b8a783992",
+      "bytes": 295
+    },
+    "protocolFactory": {
+      "address": "0x68224F668083c29e9800Be2a646d42d18cedF7e2",
+      "hash": "0xed6b710a769987f50494d713f278817992e3266e45898a990be878efc2fcbbce",
+      "bytes": 130
+    },
+    "protocolCircuitBeacon": {
+      "address": "0xf8D6d8EB894d6971c8976Ad8b4971cbEFE028156",
+      "hash": "0x964014cd563c5bc62e1f8a3b2995969d6385f25da1e4efa353a01a62e0b75cca",
+      "bytes": 619
+    },
+    "protocolCircuitImplementation": {
+      "address": "0x8E1D125Def6d3826C278299273a0760D47626068",
+      "hash": "0x2ea433839e23b3773b7880d6f1807affb0f648ae98760b9a3b6394879665c345",
+      "bytes": 12560
+    },
+    "transistors": {
+      "address": "0x8CF6C8c2472136c85e4b89fd6996C2cc54BCA23e",
+      "hash": "0xeadb02c1bca8b1501036e5f32064ed69c6b4feb57dea05c4a56aad62ee492393",
+      "bytes": 295
+    },
+    "staticData": {
+      "address": "0x9EC103817da8642339315F21e721aB289B47fC2f",
+      "hash": "0x6518399af1e530d9077c01090dca9778ac0c8e44f72c4ece358569423016b43c",
+      "bytes": 5833
+    }
+  },
+  "project": {
+    "assemblyProxy": "0xFc970a468649261324DD11A38Cc532b717bDf1eE",
+    "projectBeacon": "0xeecf62291a624edbe6e3324f9b73a2afa91c3581",
+    "owner": "0xd5E2af7fFde4E16b98284C12e0b6d5E09cC515fE",
+    "pendingOwner": "0x0000000000000000000000000000000000000000",
+    "assemblyImplementation": "0x5dc8d01DA5517fCe1C9e127DBa32ae7118B17B0c"
+  },
+  "protocol": {
+    "processor": "0xD72Cfc1D2F8B659ce1Ae441Ae18c3c0f9A3710C5",
+    "protocolFactory": "0x68224F668083c29e9800Be2a646d42d18cedF7e2",
+    "protocolCircuitBeacon": "0xf8D6d8EB894d6971c8976Ad8b4971cbEFE028156",
+    "protocolCircuitImplementation": "0x8E1D125Def6d3826C278299273a0760D47626068",
+    "transistors": "0x8CF6C8c2472136c85e4b89fd6996C2cc54BCA23e",
+    "transistorsEvidence": "Processor.transistors() and nonempty code at this pinned block; interface observation, not a full permission audit"
+  },
+  "assemblyState": {
+    "collection": "0xD72Cfc1D2F8B659ce1Ae441Ae18c3c0f9A3710C5",
+    "staticData": "0x9EC103817da8642339315F21e721aB289B47fC2f",
+    "builder": "0xd5E2af7fFde4E16b98284C12e0b6d5E09cC515fE",
+    "factory": "0x68224F668083c29e9800Be2a646d42d18cedF7e2",
+    "beacon": "0xf8D6d8EB894d6971c8976Ad8b4971cbEFE028156",
+    "implementation": "0x8E1D125Def6d3826C278299273a0760D47626068",
+    "IMPLEMENTATION_VERSION": "0x4533459c1ff165908eacb23320f548ecd7c3391017fab558e46217c7b7b468a0",
+    "config": [
+      10419,
+      166700,
+      0,
+      2,
+      794,
+      64,
+      "0xaf278ff18bd4299d6760235f5f853826421051ed7dec77120a6898a8123685b1",
+      "0x4984f7689b6f5b66c2a8b46a31d6a09bd8172566d6f234642b69a59a3be798f6",
+      "0x11304d408698f3cd7280a37b8fd188b2aced7165df9361c46685869bd2314855"
+    ],
+    "configuredCount": 0,
+    "configuredRecords": "0",
+    "presentCount": 0,
+    "ready": false,
+    "isSealed": false,
+    "active": false,
+    "completedSteps": 0,
+    "implementationValid": true,
+    "custodyFault": false,
+    "assemblyVersion": "1",
+    "completeDataSlots": 0,
+    "chunkCount": 0,
+    "loadedFrames": 0
+  },
+  "data": {
+    "address": "0x9EC103817da8642339315F21e721aB289B47fC2f",
+    "builder": "0xd5E2af7fFde4E16b98284C12e0b6d5E09cC515fE",
+    "registered": "0",
+    "pageCount": "51567",
+    "complete": false,
+    "config": [
+      4096,
+      "204663504",
+      "6502144",
+      "0x24febbe3695442388fe20cbf1c0c65305914fe3afbbf949647f5e8e445199212",
+      "0x21467cdaa6bb2625efa60c4b7fccf3b200af2a56cc724ab2d053659551e41aca"
+    ],
+    "commitment": "0x7065f7ffcb2e8a289e6043643435473f5fa2e0ffec6becbe51d944b94f2a0bb9"
+  },
+  "deploymentRecords": {
+    "status": "VERIFIED_RECEIPTS",
+    "transactions": [
+      {
+        "txHash": "0x53a9ebdf78345e8b0eff7e6513f85641a1b3cdc422058bc8009509d14ce71cdd",
+        "role": "staticData",
+        "blockNumber": "0x7510342",
+        "blockHash": "0x06d673ad126ebe9f90fa293278fa65d86d02ba2ad1df3301c80bad175d253c51",
+        "costWei": "69378600000000",
+        "status": "VERIFIED_CANONICAL_RECEIPT"
+      },
+      {
+        "txHash": "0x4e2f108c7ec8a287391bc5d188f9a2b58deeeb706af0b07d1e7bfda9f9ded775",
+        "role": "initializer",
+        "blockNumber": "0x751035f",
+        "blockHash": "0x2ddd8c1f9bea3926619f993021cddcd0854f65ad9ea17ee6fe7c3aa88d39fd07",
+        "costWei": "37518500000000",
+        "status": "VERIFIED_CANONICAL_RECEIPT"
+      },
+      {
+        "txHash": "0x4e3dbf98fec20565e524df858d19c182f7a9b91e4840dfb5356f282e119a61e6",
+        "role": "assemblyImplementation",
+        "blockNumber": "0x751037c",
+        "blockHash": "0xfdd573043b22fdd091268ee40c7bc2a6898be4b4e08e9297683430c08ac73fb3",
+        "costWei": "270730200000000",
+        "status": "VERIFIED_CANONICAL_RECEIPT"
+      },
+      {
+        "txHash": "0x8f19a832e7715030a87b441b56838fd3091eae0e477c27ec8070656349624666",
+        "role": "projectBeacon",
+        "blockNumber": "0x751039b",
+        "blockHash": "0xb57c51aee47d81b079fabddc057a9489933604e296519d9de13a89869fee1e76",
+        "costWei": "12638950000000",
+        "status": "VERIFIED_CANONICAL_RECEIPT"
+      },
+      {
+        "txHash": "0xda20c403b01f86d8f6ba50d2ae6d53801ec91060f4b1cf0a0aa7a996f7633111",
+        "role": "assemblyProxy",
+        "blockNumber": "0x75103b7",
+        "blockHash": "0x536b66e62baae7d13dac5a2ae08fb3289ff7f026a7bbf82aaa9449cf83ff57cc",
+        "costWei": "18643150000000",
+        "status": "VERIFIED_CANONICAL_RECEIPT"
+      }
+    ]
+  },
+  "mainnetFullAssembly": "NOT_READY",
+  "fullBrainAcceptance": "NOT_PERFORMED",
+  "trust": "RPC observation pinned to one block number and rechecked hash; no consensus proof or finality guarantee. Local expected records are not modified."
+}
