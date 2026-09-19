@@ -1,0 +1,6 @@
+/** Independent integer equation; never imported by gate execution or state routing. */
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+import type {MicroPlan} from './packed-micro.ts';
+export function reference(p:MicroPlan,v:Int16Array,s:Uint8Array,frame:Uint8Array){const nv=new Int16Array(v.length),ns=new Uint8Array(s.length);for(let n=0;n<v.length;n++){let sum=Math.floor(v[n]/2);for(let e=p.offsets[n];e<p.offsets[n+1];e++){const source=p.sources[e];sum+=p.weights[e]*(source<0x80000000?s[source]:frame[source-0x80000000]);}const clamped=Math.max(-32768,Math.min(32767,sum));ns[n]=Number(clamped>=p.thresholds[n]);nv[n]=ns[n]?0:clamped;}return {v:nv,spikes:ns};}
+export function compareState(actual:{v:Int16Array;spikes:Uint8Array},expected:{v:Int16Array;spikes:Uint8Array},ids:string[],order:number[],write?:(s:string)=>void){const h=createHash('sha256');let spikes=0;for(let n=0;n<ids.length;n++){const id=ids[order[n]];assert.equal(actual.v[n],expected.v[n],'V_BODY_'+id);assert.equal(actual.spikes[n],expected.spikes[n],'SPIKE_BODY_'+id);const row=id+':'+actual.v[n]+':'+actual.spikes[n]+'\n';h.update(row);write?.(row);spikes+=actual.spikes[n];}return {bodyStateSha256:h.digest('hex'),spikes};}

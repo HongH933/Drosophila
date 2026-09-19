@@ -1,0 +1,23 @@
+{
+  "role": "COMPARISON_ONLY_NEVER_EXECUTION_INPUT",
+  "states": [
+    {
+      "step": 1,
+      "file": "step1.states.txt.gz",
+      "bytes": 572971,
+      "sha256": "24a3c6f9cd311fe4c939835ad28e9679cc9f8f31436ceacfb9dacbaebad1ec1c",
+      "rawBytes": 1905764,
+      "rawSha256": "774874e05e230b261427ff79348dea76a8088f86589f2fcb3a07eac5aa89eb8a",
+      "lines": 166700
+    },
+    {
+      "step": 2,
+      "file": "step2.states.txt.gz",
+      "bytes": 642054,
+      "sha256": "245c6210c9ef0ac0077ceb40cffb504a56610819b1e223fafe6761fc0b660db0",
+      "rawBytes": 2051633,
+      "rawSha256": "5ffda5019a0eaf1dd93fdc1cda0737fd88031e2401ac67dc63b541f88a683bb5",
+      "lines": 166700
+    }
+  ]
+}

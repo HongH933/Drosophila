@@ -1,0 +1,162 @@
+{
+  "classification": "ENGINEERING_PARAMETER_STRESS_NOT_FORMAL_MODEL",
+  "core": {
+    "bytes": 404,
+    "info": {
+      "gateCount": 59,
+      "nIn": 12,
+      "nOut": 3,
+      "nState": 3
+    },
+    "latch": 3,
+    "nand": 56,
+    "netlist": "0x0100001c010000260100003b00000004000003000000110000110000001200000200000002000002000000110000140000001500001300000016000016000000050000050000000e000018000000190000190000001a0000170000001b0000130000000f00000f000000070000060000001e00001d00000008000008000000200000020000000800001400000022000021000000230000060000002400001f00000025000025000000100000100000000b00000b0000000c00000c0000000f0000140000000d00000d0000002b000009000000090000090000000d00002d0000002e00002c0000002f00001d0000003000002a0000003100003100000032000029000000330000280000003400000a000000350000270000000c00000a0000003700003700000038000031000000390000360000003a00003a000000190000160000003c00001b0000003d00003d0000001000002d0000003f000032000000400000400000003f00003f0000003e00003e0000004100004100000042000042000000430000430000004400004400000045000045",
+    "netlistHash": "5986bf86deb4ce429972fcfe276590b627b21f0a8f67a50cbb474b8f7e18aec8",
+    "version": "lif-int16-bitserial-v1"
+  },
+  "implementation": "BrainAssemblyMicroPages",
+  "input": {
+    "externalPorts": 0,
+    "frames": 2,
+    "initial": "v=0; old spikes=1 for every included neuron at t=0, a declared engineering pulse; subsequent states only Circuit outputs.",
+    "outsideScope": "not simulated"
+  },
+  "parameters": {
+    "encoding": "parameter-decisions is a single shared Parquet table with bodyId, raw prediction/confidence/ground-truth/consensus, decisions and approval; signs is one signed byte per original index (0 only for unused no-output sign)",
+    "unresolved": 3468
+  },
+  "profile": {
+    "approval": "PROPOSED_NOT_USER_APPROVED",
+    "classification": "ENGINEERING_PARAMETER_STRESS_NOT_FORMAL_MODEL",
+    "datasetId": "male-cns:v1.0",
+    "equation": "lif-int16-v1",
+    "fastSigns": {
+      "acetylcholine": 1,
+      "gaba": -1,
+      "glutamate": -1,
+      "histamine": -1
+    },
+    "frames": "two empty frames; no extra input records, outside-scope segments are not simulated",
+    "id": "malecns-m3-balanced-unresolved-stress-v1",
+    "initial": "v=0; old spikes=1 for every included neuron at t=0, a declared engineering pulse; subsequent states only Circuit outputs.",
+    "modelAssumption": true,
+    "parentPolicySha256": "41a487227ab02f5b6f4e271ac814e15eedf2c644ae71c70e742d772a0871d477",
+    "precedence": [
+      "non-unclear ground_truth",
+      "static consensus_nt"
+    ],
+    "predictionPolicy": "Preserve raw body/type predictions and confidences; do not bypass author unclear gates. Static values are authoritative data even where prose differs.",
+    "source": "https://doi.org/10.1016/j.cell.2026.08.015",
+    "threshold": 32,
+    "unresolved": [
+      "unclear",
+      "missing",
+      "dopamine",
+      "octopamine",
+      "serotonin"
+    ],
+    "unresolvedRule": "For output neurons unresolved by parent policy: SHA256(UTF8(\"malecns-m3-stress-v1:\" + decimal bodyId)); first byte <128 => +1 else -1. Not index dependent, not a transmitter prediction."
+  },
+  "schema": "malecns-micro-full-codepages-v1",
+  "source": {
+    "binding": {
+      "datasetId": "male-cns:v1.0",
+      "datasetLockSha256": "539191aa65f6e6bb9235e2b1f1ba830002c4ca6bff735a7f32feb6b9c6edcf46",
+      "groupingVersion": "contiguous-v1:c75b50bb976f13f5373a077c7c2c84db159dfab41459c2b43daa35754f99f1ae",
+      "implementationVersion": "lif-int16-bitserial-assembly-codepages-v1",
+      "modelVersion": "lif-int16-v1",
+      "profileSha256": "69b44dcdd7b335ccb7dce8d24caccf106009004ca46087b5200d99d072057556",
+      "scopeSha256": "5357302617358da0056b4c95cced2d435ba8d907415f48d45a830518e19bf2c4",
+      "scopeVersion": "malecns-superclass-assigned-v2"
+    },
+    "biologicalConnections": 25582938,
+    "biologicalSynapses": 124177617,
+    "dataIdentity": {
+      "datasetId": "male-cns:v1.0",
+      "files": [
+        {
+          "bytes": 14483314,
+          "generation": "1780494878811468",
+          "name": "body-annotations-male-cns-v1.0-minconf-0.5.feather",
+          "sha256": "2177e246113e4cfbf1e7772ec37c6da1955ff22e8063d0b1f833101f99a9a3b2"
+        },
+        {
+          "bytes": 43282834,
+          "generation": "1780894899156750",
+          "name": "body-neurotransmitters-male-cns-v1.0.feather",
+          "sha256": "95c9289220663abeb3409f3ad9e5a7f8a53f8093f5139d15502cd08da8879621"
+        },
+        {
+          "bytes": 1051241946,
+          "generation": "1780494887545976",
+          "name": "connectome-weights-male-cns-v1.0-minconf-0.5.feather",
+          "sha256": "e35da783d1c686b2b58b3b87cd6a403ae43bfcfba8bff28e08ef752c1a56afc1"
+        }
+      ],
+      "schema": "malecns-static-data-identity-v2",
+      "upstreamFilter": "Official minconf-0.5 package; no additional weak-edge threshold"
+    },
+    "derivedEdgesRawSha256": "74a74b468d10a3bac55deeefd635b6323513ba5b58bdc336c66798e469056bd5",
+    "ordering": "original ascending post then pre, uint32LE pre/post/absoluteWeight triples",
+    "outsideScope": "All outside rows remain in pinned source; NOT simulated",
+    "scope": {
+      "ENS": "Retain assigned neuronal body; do not invent anatomical expansion of this label.",
+      "approval": "PROPOSED_NOT_USER_APPROVED",
+      "bodyIdsRawSha256": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+      "datasetId": "male-cns:v1.0",
+      "id": "malecns-superclass-assigned-v2",
+      "method": "https://doi.org/10.1016/j.cell.2026.08.015",
+      "null": "Exclude under author neuron-vs-fragment method, with separate reverse Traced difference.",
+      "rule": "Nonempty assigned superclass from enumerated static v1.0 vocabulary; reject novel values and explicit Glia contradictions. No status/type/degree filter.",
+      "tbc": "Include as author-assigned neuronal body; broad classification remains uncertain, never treated as a confirmed subtype.",
+      "vocabulary": [
+        "ENS",
+        "ascending_neuron",
+        "cb_efferent",
+        "cb_endocrine",
+        "cb_intrinsic",
+        "cb_motor",
+        "cb_sensory",
+        "cb_sensory_tbc",
+        "descending_neuron",
+        "descending_neuron_tbc",
+        "efferent_ascending",
+        "efferent_descending",
+        "ol_intrinsic",
+        "ol_sensory",
+        "sensory_ascending",
+        "sensory_ascending_tbc",
+        "sensory_descending",
+        "visual_centrifugal",
+        "visual_projection",
+        "visual_projection_tbc",
+        "vnc_efferent",
+        "vnc_endocrine",
+        "vnc_intrinsic",
+        "vnc_motor",
+        "vnc_sensory",
+        "vnc_sensory_tbc",
+        "vnc_tbc"
+      ]
+    },
+    "sourceRows": "Every selected raw pair exactly once; join pinned weights body_pre/body_post to exact ids roster. No threshold, duplicate pairs rejected."
+  },
+  "stateFormat": {
+    "logical": "17 bits per neuron: signed16 voltage, old spike",
+    "step": "55 +20*recordCount operations per neuron; old spikes fixed until all required modules complete",
+    "work": "3 actual LATCH bits + external unsigned20 accumulator; neuron/cursor/bit/phase/cycles/round"
+  },
+  "storage": {
+    "allRequiredContentOnChain": true,
+    "logicalState": "adapter storage",
+    "recordBytes": 8,
+    "runtime": "STOP + immutable payload",
+    "schema": "micro-static-code-pages-v1",
+    "sizes": [
+      4096,
+      8192,
+      16384
+    ],
+    "workState": "adapter storage"
+  }
+}

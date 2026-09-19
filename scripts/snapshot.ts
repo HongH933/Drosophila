@@ -1,0 +1,2 @@
+import {prepare} from '../src/initial.ts';
+const start=performance.now();const {loaded,rt,release}=await prepare();console.log(JSON.stringify({status:'PASS_OFFLINE_SNAPSHOT_AND_REBUILD',dataset:release.modelBinding.datasetId,slots:rt.modules,neurons:rt.v.length,edges:loaded.plan.sources.length,step:rt.step,active:rt.active,block:release.binding.block,elapsedMs:performance.now()-start,networkRequests:0}));

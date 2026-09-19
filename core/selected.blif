@@ -1,0 +1,55 @@
+# Benchmark "circuit" written by ABC on Tue Sep 15 23:38:30 2026
+.model circuit
+.inputs x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 q0 q1 q2
+.outputs y0 y1 y2 y3 y4 y5
+.gate nand2 A=x2 B=x1 Y=new_n22
+.gate inv   A=new_n22 Y=new_n23
+.gate nand2 A=new_n23 B=x0 Y=new_n24
+.gate inv   A=x0 Y=new_n25
+.gate nand2 A=new_n22 B=new_n25 Y=new_n26
+.gate nand2 A=new_n26 B=new_n24 Y=new_n27
+.gate inv   A=new_n27 Y=new_n28
+.gate inv   A=x3 Y=new_n29
+.gate nand2 A=q0 B=new_n29 Y=new_n30
+.gate inv   A=new_n30 Y=new_n31
+.gate nand2 A=new_n31 B=new_n28 Y=new_n32
+.gate nand2 A=new_n32 B=new_n24 Y=y0
+.gate inv   A=q1 Y=new_n34
+.gate nand2 A=x5 B=x4 Y=new_n35
+.gate nand2 A=new_n35 B=new_n34 Y=new_n36
+.gate inv   A=x6 Y=new_n37
+.gate nand2 A=new_n37 B=x0 Y=new_n38
+.gate nand2 A=x6 B=new_n25 Y=new_n39
+.gate nand2 A=new_n39 B=new_n38 Y=new_n40
+.gate nand2 A=new_n40 B=x4 Y=new_n41
+.gate nand2 A=new_n41 B=new_n36 Y=new_n42
+.gate inv   A=new_n42 Y=y1
+.gate inv   A=q2 Y=new_n44
+.gate inv   A=x9 Y=new_n45
+.gate inv   A=x10 Y=new_n46
+.gate nand2 A=q1 B=new_n25 Y=new_n47
+.gate inv   A=x11 Y=new_n48
+.gate nand2 A=new_n48 B=x7 Y=new_n49
+.gate inv   A=x7 Y=new_n50
+.gate nand2 A=x11 B=new_n50 Y=new_n51
+.gate nand2 A=new_n51 B=new_n49 Y=new_n52
+.gate nand2 A=new_n52 B=new_n34 Y=new_n53
+.gate nand2 A=new_n53 B=new_n47 Y=new_n54
+.gate inv   A=new_n54 Y=new_n55
+.gate nand2 A=new_n55 B=new_n46 Y=new_n56
+.gate nand2 A=new_n56 B=new_n45 Y=new_n57
+.gate nand2 A=new_n57 B=x8 Y=new_n58
+.gate nand2 A=new_n58 B=new_n44 Y=new_n59
+.gate nand2 A=x10 B=x8 Y=new_n60
+.gate inv   A=new_n60 Y=new_n61
+.gate nand2 A=new_n61 B=new_n54 Y=new_n62
+.gate nand2 A=new_n62 B=new_n59 Y=new_n63
+.gate inv   A=new_n63 Y=y2
+.gate nand2 A=new_n30 B=new_n27 Y=new_n65
+.gate nand2 A=new_n65 B=new_n32 Y=new_n66
+.gate inv   A=new_n66 Y=y3
+.gate nand2 A=q2 B=new_n50 Y=new_n68
+.gate nand2 A=new_n68 B=new_n55 Y=new_n69
+.gate inv   A=new_n69 Y=y4
+.gate inv   A=new_n68 Y=y5
+.end

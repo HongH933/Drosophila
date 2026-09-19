@@ -1,0 +1,1 @@
+{"status":"PASS","parentRepositoryRead":"DENIED_BY_NODE_PERMISSION_MODEL","network":"DENIED_BY_PRELOAD_GUARD","actualFullCheckpointSingleByteCorruption":"REJECTED","uncorruptedFullCheckpointReload":"PASS","walletConfigured":false}

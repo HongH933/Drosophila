@@ -1,0 +1,1 @@
+{"compiler":"0.8.24+commit.e11b9ed9.Emscripten.clang","settings":{"optimizer":{"enabled":true,"runs":200},"viaIR":true,"evmVersion":"shanghai","outputSelection":{"*":{"*":["abi","evm.bytecode.object","evm.deployedBytecode.object","evm.deployedBytecode.immutableReferences"]}}},"optionalCapacitorDependency":false}

@@ -1,0 +1,202 @@
+[
+  {
+    "name": "solc",
+    "version": "0.8.24",
+    "license": "MIT",
+    "files": [
+      "solc-LICENSE"
+    ]
+  },
+  {
+    "name": "command-exists",
+    "version": "1.2.9",
+    "license": "MIT",
+    "files": [
+      "command-exists-LICENSE"
+    ]
+  },
+  {
+    "name": "os-tmpdir",
+    "version": "1.0.2",
+    "license": "MIT",
+    "files": [
+      "os-tmpdir-license"
+    ]
+  },
+  {
+    "name": "commander",
+    "version": "8.3.0",
+    "license": "MIT",
+    "files": [
+      "commander-LICENSE"
+    ]
+  },
+  {
+    "name": "typescript",
+    "version": "5.9.3",
+    "license": "Apache-2.0",
+    "files": [
+      "typescript-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "ox",
+    "version": "0.14.44",
+    "license": "MIT",
+    "files": [
+      "ox-LICENSE"
+    ]
+  },
+  {
+    "name": "abitype",
+    "version": "1.2.3",
+    "license": "MIT",
+    "files": [
+      "abitype-LICENSE"
+    ]
+  },
+  {
+    "name": "undici-types",
+    "version": "7.16.0",
+    "license": "MIT",
+    "files": [
+      "undici-types-LICENSE"
+    ]
+  },
+  {
+    "name": "eventemitter3",
+    "version": "5.0.1",
+    "license": "MIT",
+    "files": [
+      "eventemitter3-LICENSE"
+    ]
+  },
+  {
+    "name": "semver",
+    "version": "5.7.2",
+    "license": "ISC",
+    "files": [
+      "semver-LICENSE"
+    ]
+  },
+  {
+    "name": "viem",
+    "version": "2.56.5",
+    "license": "MIT",
+    "files": [
+      "viem-LICENSE"
+    ]
+  },
+  {
+    "name": "memorystream",
+    "version": "0.3.1",
+    "license": null,
+    "files": [
+      "memorystream-LICENSE"
+    ]
+  },
+  {
+    "name": "follow-redirects",
+    "version": "1.16.0",
+    "license": "MIT",
+    "files": [
+      "follow-redirects-LICENSE"
+    ]
+  },
+  {
+    "name": "tmp",
+    "version": "0.0.33",
+    "license": "MIT",
+    "files": [
+      "tmp-LICENSE"
+    ]
+  },
+  {
+    "name": "js-sha3",
+    "version": "0.8.0",
+    "license": "MIT",
+    "files": [
+      "js-sha3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "ws",
+    "version": "8.21.0",
+    "license": "MIT",
+    "files": [
+      "ws-LICENSE"
+    ]
+  },
+  {
+    "name": "isows",
+    "version": "1.0.7",
+    "license": "MIT",
+    "files": [
+      "isows-LICENSE"
+    ]
+  },
+  {
+    "name": "@types/node",
+    "version": "25.0.3",
+    "license": "MIT",
+    "files": [
+      "@types_node-LICENSE"
+    ]
+  },
+  {
+    "name": "@scure/bip32",
+    "version": "1.7.0",
+    "license": "MIT",
+    "files": [
+      "@scure_bip32-LICENSE"
+    ]
+  },
+  {
+    "name": "@scure/bip39",
+    "version": "1.6.0",
+    "license": "MIT",
+    "files": [
+      "@scure_bip39-LICENSE"
+    ]
+  },
+  {
+    "name": "@scure/base",
+    "version": "1.2.6",
+    "license": "MIT",
+    "files": [
+      "@scure_base-LICENSE"
+    ]
+  },
+  {
+    "name": "@noble/hashes",
+    "version": "1.8.0",
+    "license": "MIT",
+    "files": [
+      "@noble_hashes-LICENSE"
+    ]
+  },
+  {
+    "name": "@noble/ciphers",
+    "version": "1.3.0",
+    "license": "MIT",
+    "files": [
+      "@noble_ciphers-LICENSE"
+    ]
+  },
+  {
+    "name": "@noble/curves",
+    "version": "1.9.1",
+    "license": "MIT",
+    "files": [
+      "@noble_curves-LICENSE"
+    ]
+  },
+  {
+    "name": "@adraffy/ens-normalize",
+    "version": "1.11.1",
+    "license": "MIT",
+    "files": [
+      "@adraffy_ens-normalize-LICENSE"
+    ]
+  }
+]

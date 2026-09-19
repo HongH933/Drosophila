@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "tests": 11,
+  "scope": [
+    "32768 core transitions",
+    "model/order differential",
+    "immutable checkpoint restore and corruption",
+    "actual release shard missing/tampered",
+    "network/block identity rejection",
+    "read-only method enforcement",
+    "deployed ABI slot/page checks",
+    "blockHash preference and unsupported fallback"
+  ],
+  "typecheck": "PASS",
+  "contracts": "EXACT_CREATION_AND_RUNTIME_TEMPLATE_RECOMPILE_PASS",
+  "core": "BYTE_EXACT_404_BYTE_GENERATION_PASS",
+  "freshInstall": "npm ci in independent directory; own node_modules",
+  "samePhysicalComputer": true,
+  "differentPhysicalComputer": false,
+  "savedResultReload": "PASS_SAVED_RESULT_AND_CHECKPOINT: clean independent resumed report, step=2 active=false",
+  "currentStatusWithoutRPC": "NOT_RUN/RPC_NOT_CONFIGURED"
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "droso-public-export-scan-v1",
+  "status": "PASS",
+  "scannedPublicFiles": 144,
+  "expandedBytes": 502674447,
+  "checks": [
+    "exact local RPC/key values absent (values never emitted)",
+    "personal absolute paths absent",
+    "no public symlinks",
+    "private runtime/cache/env/git excluded from release"
+  ],
+  "scope": "public file set; known local credentials and paths, not a general independent security audit"
+}

@@ -1,0 +1,2 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {mapped} from '../src/synthesis.ts';import {compileMicroCore} from '../src/micro-core.ts';import {keccak256} from 'viem';
+const core=compileMicroCore(),generated=mapped(fs.readFileSync('core/selected.blif','utf8'),core.info);assert.equal(generated.netlist,core.netlist);console.log(JSON.stringify({...core,netlist:undefined,keccak256:keccak256(core.netlist),status:'PASS_BYTE_EXACT_NAND_LATCH_GENERATION'}));

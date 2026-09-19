@@ -1,0 +1,33 @@
+{
+  "name": "droso",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "snapshot:verify": "node --max-old-space-size=2048 scripts/snapshot.ts",
+    "reproduce": "node --max-old-space-size=1536 scripts/reproduce.ts",
+    "verify:chain": "node scripts/verify-chain.ts",
+    "status:chain": "node scripts/verify-chain.ts --status",
+    "build:contracts": "node scripts/build-contracts.ts",
+    "test": "node --test test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "release:pack": "node scripts/release.ts",
+    "data:verify": "node --max-old-space-size=1536 scripts/data-verify.ts",
+    "core:verify": "node scripts/core.ts",
+    "tasks:export": "node scripts/tasks.ts",
+    "files:verify": "node scripts/check-files.ts",
+    "result:verify": "node scripts/check-result.ts"
+  },
+  "dependencies": {
+    "viem": "2.56.5"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/node": "25.0.3",
+    "solc": "0.8.24"
+  }
+}
